@@ -24,7 +24,7 @@ public class History<T>
         memory.Add(item);
 		if (memory.Count > Maximum)
 		{
-
+            Forget();
 		}
     }
 

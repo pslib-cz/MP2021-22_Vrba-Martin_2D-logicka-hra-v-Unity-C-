@@ -16,9 +16,9 @@ public class LevelManager : MonoBehaviour
     const string textPlayer = "p";
 
     Stack<LevelState> History;
+    LevelState level;
 
-
-    const float tileSize = 2.56f;
+    const float tileSize = 1.28f;
 
     public List<TextAsset> levels;
 
@@ -44,8 +44,57 @@ public class LevelManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+		if (Input.anyKeyDown)
+		{
+            Direction pressed = Direction.None;
+            bool doTick = false;
 
+			if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                pressed = Direction.Up;
+                doTick = true;
+            }
+            
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                pressed = Direction.Down;
+                doTick = true;
+            }
+            
+            if (Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                pressed = Direction.Left;
+                doTick = true;
+            }
+
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                pressed = Direction.Right;
+                doTick = true;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                pressed = Direction.None;
+                doTick = true;
+            }
+
+			if (doTick)
+			{
+                Tick(pressed);
+			}
+        }
     }
+
+    void Tick(Direction pressed)
+	{
+        History.Push(new LevelState(level));
+        level.Player.PerformTick(level, pressed);
+		foreach (Button button in level.Buttons)
+		{
+            button.PerformTick(level, pressed);
+		}
+	}
 
     void LoadLevel(int levelID)
 	{

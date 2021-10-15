@@ -1,10 +1,16 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Entity
+public abstract class Entity
 {
     public GameObject MappedObject;
-    public Coordinates Coordinates;
+    public Coordinates Position;
+
+    public virtual void PerformTick(LevelState state, Direction input)
+	{
+        throw new NotImplementedException();
+	}
 
 }

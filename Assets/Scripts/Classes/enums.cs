@@ -18,25 +18,9 @@ enum TileLayer
     Environment,
 }
 
-public struct Coordinates
-{
-    int x;
-    int y;
-}
 
 
-public enum Direction
-{
-    Up,
-    Down,
-    Left,
-    Right
-}
 
-public interface IDirectionFacingEntity
-{
-    public Direction direction { get; }
-}
 
 
 
