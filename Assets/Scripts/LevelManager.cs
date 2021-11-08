@@ -8,13 +8,6 @@ public class LevelManager : MonoBehaviour
 {
     const string pathToLevels = "Assets/TimeGameAssets/Levels/";
 
-    const char rowDivider = ';';
-    const char colDivider = ',';
-
-    const string textWall = "w";
-    const string textFloor = "f";
-    const string textPlayer = "p";
-
     Stack<LevelState> History;
     LevelState level;
 
@@ -28,18 +21,70 @@ public class LevelManager : MonoBehaviour
     public string LevelName { get; set; }
 
 
-
+    
     public GameObject prefabFloor;
-    public GameObject prefabPlayer;
+    public GameObject prefabPlayer; 
     public GameObject prefabWall;
+    
+
+    //public Dictionary<TileType, GameObject> Prefabs;
 
     public List<GameObject> Environment;
+
+    Reader reader;
     // Start is called before the first frame update
     void Start()
     {
-        LoadLevel(1);
+        reader = Object.FindObjectOfType<Reader>();
         History = new Stack<LevelState>();
     }
+
+    void LoadLevel(string levelname)
+	{
+        SavedLevel savedLevel = reader.read(levelname);
+        LevelState levelState = new LevelState();
+
+		//foreach(EntityConstructor constructor in savedLevel.Entities)
+		for (int i = 0; i < savedLevel.Entities.Length; i++)
+		{
+            EntityConstructor constructor = savedLevel.Entities[i];
+
+            Entity newEntity = null;
+            GameObject newObject = null;
+			switch (constructor.T)
+			{
+				case TileType.Floor:
+                    newObject = Instantiate(prefabFloor);
+                    newEntity = new Floor(constructor, newObject);
+                    break;
+
+				case TileType.Wall:
+                    newObject = Instantiate(prefabWall);
+                    newEntity = new Wall(constructor, newObject);
+                    break;
+
+				case TileType.Player:
+                    newObject = Instantiate(prefabPlayer);
+                    newEntity = new Player(constructor, newObject);
+                    break;
+
+				case TileType.Box:
+					break;
+				case TileType.Button:
+					break;
+				default:
+                    throw new System.NotImplementedException("unknown tile type");
+			}
+
+            
+            Environment.Add(newObject);
+            levelState.Add(newEntity);
+
+		}
+
+        Render();
+	}
+
 
     // Update is called once per frame
     void Update()
@@ -48,6 +93,20 @@ public class LevelManager : MonoBehaviour
 		{
             Direction pressed = Direction.None;
             bool doTick = false;
+
+
+			#region DEBUG
+			if (Input.GetKeyDown(KeyCode.O))
+			{
+                LoadLevel("testt");
+			}
+
+            if (Input.GetKeyDown(KeyCode.P))
+			{
+
+			}
+			#endregion
+
 
 			if (Input.GetKeyDown(KeyCode.UpArrow))
             {
@@ -96,14 +155,26 @@ public class LevelManager : MonoBehaviour
 		}
 	}
 
-    void LoadLevel(int levelID)
+    void Render()
+	{
+        int z = 0;
+
+		foreach (Floor floor in level.Floors)
+		{
+            floor.MappedObject.transform.position = new Vector3(floor.Position.x, floor.Position.y, z);
+		}
+
+
+
+	}
+
+
+    /*void LoadLevel(int levelID)
 	{
         //delete previous tiles
 
         Environment = new List<GameObject>();
 
-        //LevelTextAsset = Resources.Load(/*pathToLevels+*/levelName) as TextAsset;
-        //LevelTextAsset = Resources.Load(Path.Combine(Application.streamingAssetsPath, "SampleVideo_1280x720_5mb.mp4")) as TextAsset;
         LevelTextAsset = levels[levelID];
         string[] rows = LevelTextAsset.text.Split(rowDivider);
 		for (int i = 0; i < rows.Length; i++)
@@ -177,5 +248,5 @@ public class LevelManager : MonoBehaviour
 		{
             Environment.Add(tileObject);
 		}
-    }
+    }*/
 }

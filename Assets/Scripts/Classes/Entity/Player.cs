@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class Player : Entity, IDirectionFacingEntity, IMovingEntity
 {
-	public Player()
+
+	/*public Player()
 	{
 		this.direction = Direction.None;
 	}
@@ -18,8 +18,28 @@ public class Player : Entity, IDirectionFacingEntity, IMovingEntity
 	{
 		this.direction = original.direction;
 		this.Position = original.Position;
+	}*/
+
+	public Player()
+	{
+
 	}
 
+	public Player(EntityConstructor ec, GameObject o)
+	{
+		this.direction = ec.Direction;
+		this.Position = new Coordinates(ec.CoordinateX, ec.CoordinateY);
+		this.MappedObject = o;
+	}
+
+	public Player Copy()
+	{
+		Player output = new Player();
+		output.direction = this.direction;
+		output.Position = this.Position;
+
+		return output;
+	}
 
 	#region IDirectionFacingEntity
 	private Direction direction;

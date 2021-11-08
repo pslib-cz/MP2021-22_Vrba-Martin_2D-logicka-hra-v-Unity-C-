@@ -1,3 +1,4 @@
+[System.Serializable]
 public struct Coordinates
 {
     public Coordinates(int x, int y)
@@ -13,9 +14,9 @@ public struct Coordinates
 			case Direction.None:
 				return coords;
 			case Direction.Up:
-				return new Coordinates(coords.x, coords.y - 1);
-			case Direction.Down:
 				return new Coordinates(coords.x, coords.y + 1);
+			case Direction.Down:
+				return new Coordinates(coords.x, coords.y - 1);
 			case Direction.Left:
 				return new Coordinates(coords.x - 1, coords.y);
 			case Direction.Right:
@@ -25,6 +26,6 @@ public struct Coordinates
 		}
 	}
 
-    int x;
-    int y;
+    public int x { get; set; }
+    public int y { get; set; }
 }
