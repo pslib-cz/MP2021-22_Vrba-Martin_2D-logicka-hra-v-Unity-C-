@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IMovingEntity
 {
-	
+	public void Move(Coordinates destination);
 }

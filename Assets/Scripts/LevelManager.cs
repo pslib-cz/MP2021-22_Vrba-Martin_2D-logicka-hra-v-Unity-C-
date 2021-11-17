@@ -20,19 +20,13 @@ public class LevelManager : MonoBehaviour
     private TextAsset LevelTextAsset { get; set; }
     public string LevelName { get; set; }
 
-
-    
     public GameObject prefabFloor;
     public GameObject prefabPlayer; 
     public GameObject prefabWall;
-    
-
-    //public Dictionary<TileType, GameObject> Prefabs;
 
     public List<GameObject> Environment;
 
     Reader reader;
-    // Start is called before the first frame update
     void Start()
     {
         reader = Object.FindObjectOfType<Reader>();
@@ -41,10 +35,13 @@ public class LevelManager : MonoBehaviour
 
     void LoadLevel(string levelname)
 	{
+		foreach (GameObject thing in Environment) //clear the level
+		{
+            Destroy(thing);
+		}
         SavedLevel savedLevel = reader.read(levelname);
         LevelState levelState = new LevelState();
 
-		//foreach(EntityConstructor constructor in savedLevel.Entities)
 		for (int i = 0; i < savedLevel.Entities.Length; i++)
 		{
             EntityConstructor constructor = savedLevel.Entities[i];
@@ -82,6 +79,8 @@ public class LevelManager : MonoBehaviour
 
 		}
 
+        level = levelState;
+
         Render();
 	}
 
@@ -93,47 +92,57 @@ public class LevelManager : MonoBehaviour
 		{
             Direction pressed = Direction.None;
             bool doTick = false;
+            //Debug.Log("pressed something");
 
+            #region DEBUG
+            if (Input.GetKeyDown(KeyCode.I))
+            {
+                LoadLevel("sus");
+            }
 
-			#region DEBUG
-			if (Input.GetKeyDown(KeyCode.O))
+            if (Input.GetKeyDown(KeyCode.O))
 			{
                 LoadLevel("testt");
-			}
+            }
 
             if (Input.GetKeyDown(KeyCode.P))
-			{
-
-			}
-			#endregion
-
-
-			if (Input.GetKeyDown(KeyCode.UpArrow))
             {
+                LoadLevel("cool");
+            }
+            #endregion
+
+
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                //Debug.Log("pressed up");
                 pressed = Direction.Up;
                 doTick = true;
             }
             
             if (Input.GetKeyDown(KeyCode.DownArrow))
             {
+                //Debug.Log("pressed down");
                 pressed = Direction.Down;
                 doTick = true;
             }
             
             if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
+                //Debug.Log("pressed left");
                 pressed = Direction.Left;
                 doTick = true;
             }
 
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
+                //Debug.Log("pressed right");
                 pressed = Direction.Right;
                 doTick = true;
             }
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
+                //Debug.Log("pressed space");
                 pressed = Direction.None;
                 doTick = true;
             }
@@ -153,100 +162,28 @@ public class LevelManager : MonoBehaviour
 		{
             button.PerformTick(level, pressed);
 		}
+        Render();
 	}
 
     void Render()
 	{
         int z = 0;
-
 		foreach (Floor floor in level.Floors)
 		{
-            floor.MappedObject.transform.position = new Vector3(floor.Position.x, floor.Position.y, z);
+            floor.MappedObject.transform.position = new Vector3(floor.Position.x, floor.Position.y, z) * tileSize;
 		}
 
 
 
-	}
-
-
-    /*void LoadLevel(int levelID)
-	{
-        //delete previous tiles
-
-        Environment = new List<GameObject>();
-
-        LevelTextAsset = levels[levelID];
-        string[] rows = LevelTextAsset.text.Split(rowDivider);
-		for (int i = 0; i < rows.Length; i++)
-		{
-            string row = rows[(rows.Length - 1) - i];
-            string[] tiles = row.Split(colDivider);
-            
-            //Debug.Log("=========row "+i);
-            //Debug.Log(row);
-			for (int j = 0; j < tiles.Length; j++)
-			{
-                string tile = tiles[j];
-                
-                string tileCodeString = tile; //use only first thing from that tho
-
-
-                int tileCode;
-                if (!int.TryParse(tileCodeString, out tileCode))
-				{
-                    Debug.LogError("couldnt convert " + tileCodeString + " into number");
-				}
-
-                Create((TileType)tileCode, i, j);
-			}
-		}
-
-
-	}
-
-    void Create(TileType tileCode, int i, int j)
-	{
-        GameObject tileObject;
-        float x = tileSize * j;
-        float y = tileSize * i;
-
-        TileLayer layer;
+        z = -1;
+        level.Player.MappedObject.transform.position = new Vector3(level.Player.Position.x, level.Player.Position.y, z) * tileSize;
         
-        switch (tileCode)
-        {
-            case TileType.Nothing:
-                return;
-
-            case TileType.Wall:
-                //Wall
-                tileObject = Instantiate(prefabWall);
-				layer = TileLayer.Environment;
-                break;
-
-            case TileType.Floor:
-                //Floor
-                tileObject = Instantiate(prefabFloor);
-                layer = TileLayer.Environment;
-                break;
-            
-            case TileType.Player:
-                //Floor
-                Create(TileType.Floor, i, j);
-
-                //Player
-                tileObject = Instantiate(prefabPlayer);
-                layer = TileLayer.Object;
-                break;
-
-            default:
-                return;
-        }
-
-        tileObject.transform.position = new Vector3(x, y, (int)layer);
-        tileObject.transform.parent = gameObject.transform;
-		if (layer == TileLayer.Environment)
+        foreach (Wall wall in level.Walls)
 		{
-            Environment.Add(tileObject);
+            wall.MappedObject.transform.position = new Vector3(wall.Position.x, wall.Position.y, z) * tileSize;
 		}
-    }*/
+        
+
+	}
+
 }

@@ -3,35 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 public class Player : Entity, IDirectionFacingEntity, IMovingEntity
 {
-
-	/*public Player()
-	{
-		this.direction = Direction.None;
-	}
-
-    public Player(Direction direction)
-    {
-        this.direction = direction;
-	}
-
-	public Player(Player original)
-	{
-		this.direction = original.direction;
-		this.Position = original.Position;
-	}*/
-
-	public Player()
-	{
-
-	}
-
+	#region Constructors
+	private Player() { }
 	public Player(EntityConstructor ec, GameObject o)
 	{
 		this.direction = ec.Direction;
 		this.Position = new Coordinates(ec.CoordinateX, ec.CoordinateY);
 		this.MappedObject = o;
 	}
-
 	public Player Copy()
 	{
 		Player output = new Player();
@@ -40,7 +19,7 @@ public class Player : Entity, IDirectionFacingEntity, IMovingEntity
 
 		return output;
 	}
-
+	#endregion
 	#region IDirectionFacingEntity
 	private Direction direction;
 	public Direction GetDirection()
@@ -56,12 +35,24 @@ public class Player : Entity, IDirectionFacingEntity, IMovingEntity
 		return Position + direction;
 	}
 	#endregion
-
+	#region IMovingEntity
+	public void Move(Coordinates destination)
+	{
+		//Debug.Log("playe moved");
+		//Debug.Log(destination.x+" - "+destination.y);
+		this.Position = destination;
+	}
+	#endregion
 	#region PerformTick
 	public override void PerformTick(LevelState state, Direction input)
 	{
+		//Debug.Log("player performing tick");
 		if (input != Direction.None)
 		{
+			//Debug.Log("input isnt none");
+
+
+
 			///change direction
 			SetDirection(input);
 
@@ -76,6 +67,15 @@ public class Player : Entity, IDirectionFacingEntity, IMovingEntity
 					canMove = false;
 				}
 			}
+
+			if (canMove)
+			{
+				Move(LookingAt());
+			}
+		}
+		else
+		{
+			Debug.Log("input is none");
 		}
 
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 
@@ -132,7 +133,7 @@ public class LevelState
 		return false;
 	}
 
-	public T Get<T>(Coordinates coordinates) where T : class // might change
+	public Get<T>(Coordinates coordinates)/* where T : class // might change*/
 	{
 		if (!Entities.ContainsKey(coordinates)) return default(T);
 
@@ -142,7 +143,7 @@ public class LevelState
 		{
 			if (entity is T)
 			{
-				return entity as T;
+				return (T)Convert.ChangeType(entity, typeof(T));
 			}
 		}
 		return default(T);
