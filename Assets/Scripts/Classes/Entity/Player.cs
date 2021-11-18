@@ -57,17 +57,13 @@ public class Player : Entity, IDirectionFacingEntity, IMovingEntity
 			SetDirection(input);
 
 			///move if possible
-			bool canMove = true;
-			if (( state[LookingAt()] is IObstacle)) 
+			bool canMove = false;
+			if (state[LookingAt()].Opened)
 			{
-
-				IObstacle obstacle = state.Get<IObstacle>(LookingAt()); //might change
-				if (!obstacle.Opened)
-				{
-					canMove = false;
-				}
+				canMove = true;
+				// ...
 			}
-
+			// will add boxes and stuff later
 			if (canMove)
 			{
 				Move(LookingAt());
