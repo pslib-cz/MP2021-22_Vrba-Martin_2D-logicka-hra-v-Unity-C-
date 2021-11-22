@@ -177,6 +177,7 @@ public class LevelManager : MonoBehaviour
 
         z = -1;
         level.Player.MappedObject.transform.position = new Vector3(level.Player.Position.x, level.Player.Position.y, z) * tileSize;
+        level.Player.UpdateSprite();
         
         foreach (Wall wall in level.Walls)
 		{

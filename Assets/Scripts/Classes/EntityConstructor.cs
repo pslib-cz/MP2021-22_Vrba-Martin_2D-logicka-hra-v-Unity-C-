@@ -14,6 +14,7 @@ public class EntityConstructor
 	//IDirectionFacing
 	public Direction Direction;
 
+	//IObstacle
 	public bool Opened;
 
 

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 public class Player : Entity, IDirectionFacingEntity, IMovingEntity
@@ -10,12 +9,15 @@ public class Player : Entity, IDirectionFacingEntity, IMovingEntity
 		this.direction = ec.Direction;
 		this.Position = new Coordinates(ec.CoordinateX, ec.CoordinateY);
 		this.MappedObject = o;
+		FindRenderer();
 	}
 	public Player Copy()
 	{
 		Player output = new Player();
 		output.direction = this.direction;
 		output.Position = this.Position;
+		output.MappedObject = this.MappedObject;
+		output.FindRenderer();
 
 		return output;
 	}
@@ -24,11 +26,11 @@ public class Player : Entity, IDirectionFacingEntity, IMovingEntity
 	private Direction direction;
 	public Direction GetDirection()
 	{
-        return direction;
+		return direction;
 	}
-    public void SetDirection(Direction direction)
+	public void SetDirection(Direction direction)
 	{
-        this.direction = direction;
+		this.direction = direction;
 	}
 	public Coordinates LookingAt()
 	{
@@ -57,17 +59,13 @@ public class Player : Entity, IDirectionFacingEntity, IMovingEntity
 			SetDirection(input);
 
 			///move if possible
-			bool canMove = true;
-			if (( state[LookingAt()] is IObstacle)) 
+			bool canMove = false;
+			if (state[LookingAt()].Opened)
 			{
-
-				IObstacle obstacle = state.Get<IObstacle>(LookingAt()); //might change
-				if (!obstacle.Opened)
-				{
-					canMove = false;
-				}
+				canMove = true;
+				// ...
 			}
-
+			// will add boxes and stuff later
 			if (canMove)
 			{
 				Move(LookingAt());
@@ -79,7 +77,56 @@ public class Player : Entity, IDirectionFacingEntity, IMovingEntity
 		}
 
 
-        //do actual stuff
+		//do actual stuff
+	}
+	#endregion
+	#region UpdateSprite
+	private SpriteRenderer renderer;
+	private Dictionary<string, Sprite> sprites;
+	private void FindRenderer()
+	{
+		renderer = MappedObject.GetComponent<SpriteRenderer>();
+
+		#region sprites
+		sprites = new Dictionary<string, Sprite>();
+		//https://answers.unity.com/questions/1331550/how-to-load-sprite-dynamically-from-assets-in-unit.html
+		sprites.Add("down", Resources.Load<Sprite>("Sprites/player/player_down_128"));
+		sprites.Add("up", Resources.Load<Sprite>("Sprites/player/player_up_128"));
+		sprites.Add("right", Resources.Load<Sprite>("Sprites/player/player_right_128"));
+		sprites.Add("left", Resources.Load<Sprite>("Sprites/player/player_left_128") );
+
+		Debug.Log("sprites length " + sprites.Count);
+		#endregion
+	}
+
+	private void SetSprite(string name)
+	{
+		renderer.sprite = sprites[name];
+	}
+
+	public override void UpdateSprite()
+	{
+		switch (direction)
+		{
+			case Direction.None:
+				SetSprite("down");
+				break;
+			case Direction.Up:
+				SetSprite("up");
+				break;
+			case Direction.Down:
+				SetSprite("down");
+				break;
+			case Direction.Left:
+				SetSprite("left");
+				break;
+			case Direction.Right:
+				SetSprite("right");
+				break;
+			default:
+				SetSprite("down");
+				break;
+		}
 	}
 	#endregion
 }

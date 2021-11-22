@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class LevelState
 {
 
-	private IDictionary<Coordinates, IList<Entity>> Entities;
+	private IDictionary<Coordinates, Tile> Tiles;
 
 	public Player Player { get; private set; }
 	public List<Wall> Walls { get; private set; }
@@ -18,13 +18,13 @@ public class LevelState
 	public void Add(Entity entity)
 	{
 		//add the entity to the main dictionary
-		if (Entities.ContainsKey(entity.Position))
+		if (Tiles.ContainsKey(entity.Position))
 		{
-			Entities[entity.Position].Add(entity);
+			Tiles[entity.Position].Add(entity);
 		}
 		else
 		{
-			Entities.Add(entity.Position, new List<Entity>() { entity });
+			Tiles.Add(entity.Position, new Tile(entity));
 		}
 
 
@@ -102,25 +102,25 @@ public class LevelState
 		*/
 		//magic happens here, TODO adding to each list
 	}
-
-	public IList<Entity> this[Coordinates coord]
+	
+	public Tile this[Coordinates coord]
 	{
 		get
 		{
-			if (Entities.ContainsKey(coord))
+			if (Tiles.ContainsKey(coord))
 			{
-				return Entities[coord];
+				return Tiles[coord];
 			}
-			return null;
+			return new Tile(); //empty tile
 		}
 	}
 
-
+	/*
 	public bool Has<T>(Coordinates coordinates)
 	{
-		if (!Entities.ContainsKey(coordinates)) return false;
+		if (!Tiles.ContainsKey(coordinates)) return false;
 
-		IList<Entity> tile = Entities[coordinates];
+		IList<Entity> tile = Tiles[coordinates];
 
 		foreach (Entity entity in tile)
 		{
@@ -134,7 +134,7 @@ public class LevelState
 	}
 
 	public Get<T>(Coordinates coordinates)/* where T : class // might change*/
-	{
+	/*{
 		if (!Entities.ContainsKey(coordinates)) return default(T);
 
 		IList<Entity> tile = Entities[coordinates];
@@ -147,7 +147,7 @@ public class LevelState
 			}
 		}
 		return default(T);
-	}
+	}*/
 
 
 	public LevelState(LevelState original)
@@ -160,7 +160,7 @@ public class LevelState
 		this.Buttons = new List<Button>(original.Buttons);
 		this.Floors = new List<Floor>(original.Floors);
 		
-		this.Entities = new Dictionary<Coordinates, IList<Entity>>(original.Entities);
+		this.Tiles = new Dictionary<Coordinates, Tile>(original.Tiles);
 	}
 
 
@@ -173,7 +173,7 @@ public class LevelState
 		this.Buttons = new List<Button>();
 		this.Floors = new List<Floor>();
 
-		this.Entities = new Dictionary<Coordinates, IList<Entity>>();
+		this.Tiles = new Dictionary<Coordinates, Tile>();
 
 
 	}

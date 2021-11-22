@@ -1,12 +1,15 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class Tile
 {
-	public Tile() 
+	public Tile()
 	{
-	
+		Entities = new List<Entity>();
+	}
+
+	public Tile(Entity entity)
+	{
+		Entities = new List<Entity>() { entity};
 	}
 
 
@@ -14,15 +17,31 @@ public class Tile
 
 	public void Add(Entity entity)
 	{
-
+		Entities.Add(entity);
 	}
 
-	public bool Opened { 
-		get 
-		{ 
+	public bool Opened
+	{
+		get
+		{
+			bool hasClosedObstacle = false;
+			bool hasFloor = false;
+			foreach (Entity entity in Entities)
+			{
+				if (entity is Floor)
+					hasFloor = true;
+				if (entity is IObstacle)
+				{
+
+					if (!(entity as IObstacle).Opened)
+					{
+						hasClosedObstacle = true;
+					}
+				}
+			}
+
 			//returns true if contains floor but doesnt contain closed obstacle
-			//returns false if 
+			return hasFloor && !hasClosedObstacle;
 		}
-		private set { }
 	}
 }
