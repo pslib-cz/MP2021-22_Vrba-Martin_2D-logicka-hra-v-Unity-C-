@@ -23,6 +23,7 @@ public class LevelManager : MonoBehaviour
     public GameObject prefabFloor;
     public GameObject prefabPlayer; 
     public GameObject prefabWall;
+    public GameObject prefabBox;
 
     public List<GameObject> Environment;
 
@@ -66,6 +67,8 @@ public class LevelManager : MonoBehaviour
                     break;
 
 				case TileType.Box:
+                    newObject = Instantiate(prefabBox);
+                    newEntity = new Box(constructor, newObject);
 					break;
 				case TileType.Button:
 					break;
@@ -102,7 +105,7 @@ public class LevelManager : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.O))
 			{
-                LoadLevel("testt");
+                LoadLevel("boxtest");
             }
 
             if (Input.GetKeyDown(KeyCode.P))
@@ -167,15 +170,14 @@ public class LevelManager : MonoBehaviour
 
     void Render()
 	{
-        int z = 0;
+        int z = 0; //floor level
 		foreach (Floor floor in level.Floors)
 		{
             floor.MappedObject.transform.position = new Vector3(floor.Position.x, floor.Position.y, z) * tileSize;
 		}
 
 
-
-        z = -1;
+        z = -1; //object level
         level.Player.MappedObject.transform.position = new Vector3(level.Player.Position.x, level.Player.Position.y, z) * tileSize;
         level.Player.UpdateSprite();
         
@@ -184,6 +186,10 @@ public class LevelManager : MonoBehaviour
             wall.MappedObject.transform.position = new Vector3(wall.Position.x, wall.Position.y, z) * tileSize;
 		}
         
+        foreach (Box box in level.Boxes)
+		{
+            box.MappedObject.transform.position = new Vector3(box.Position.x, box.Position.y, z) * tileSize;
+		}
 
 	}
 

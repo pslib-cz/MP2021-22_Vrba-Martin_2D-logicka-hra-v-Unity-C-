@@ -9,7 +9,7 @@ public class Tile
 
 	public Tile(Entity entity)
 	{
-		Entities = new List<Entity>() { entity};
+		Entities = new List<Entity>() { entity };
 	}
 
 
@@ -18,6 +18,10 @@ public class Tile
 	public void Add(Entity entity)
 	{
 		Entities.Add(entity);
+		if(entity is Box)
+		{
+			this.Box = entity as Box;
+		}
 	}
 
 	public bool Opened
@@ -44,4 +48,21 @@ public class Tile
 			return hasFloor && !hasClosedObstacle;
 		}
 	}
+
+	public bool HasBox
+	{
+		get
+		{
+			foreach (Entity entity in Entities)
+			{
+				if (entity is Box)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+	public Box Box { get; private set; }
+
 }

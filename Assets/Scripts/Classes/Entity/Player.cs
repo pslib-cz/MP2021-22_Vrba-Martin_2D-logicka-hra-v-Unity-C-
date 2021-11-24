@@ -48,17 +48,12 @@ public class Player : Entity, IDirectionFacingEntity, IMovingEntity
 	#region PerformTick
 	public override void PerformTick(LevelState state, Direction input)
 	{
-		//Debug.Log("player performing tick");
 		if (input != Direction.None)
 		{
-			//Debug.Log("input isnt none");
-
-
-
 			///change direction
 			SetDirection(input);
 
-			///move if possible
+			/*///move if possible
 			bool canMove = false;
 			if (state[LookingAt()].Opened)
 			{
@@ -69,7 +64,12 @@ public class Player : Entity, IDirectionFacingEntity, IMovingEntity
 			if (canMove)
 			{
 				Move(LookingAt());
-			}
+			}*/
+
+			if(state)
+
+
+
 		}
 		else
 		{
