@@ -65,8 +65,23 @@ public class Player : Entity, IDirectionFacingEntity, IMovingEntity
 			{
 				Move(LookingAt());
 			}*/
+			Tile destination = state[LookingAt()];
 
-			if(state)
+			if (destination.Opened)
+			{
+				if (destination.HasBox)
+				{
+					Box box = destination.Box;
+					if (box.Push(state,direction))
+					{
+						Move(Position + direction);
+					}
+				}
+				else
+				{
+					Move(Position + direction);
+				}
+			}
 
 
 
