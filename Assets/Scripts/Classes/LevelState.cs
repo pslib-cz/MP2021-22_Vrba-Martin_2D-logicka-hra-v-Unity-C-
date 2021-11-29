@@ -24,7 +24,9 @@ public class LevelState
 		}
 		else
 		{
-			Tiles.Add(entity.Position, new Tile(entity));
+			Tile newTile = new Tile(this);
+			newTile.Add(entity);
+			Tiles.Add(entity.Position, newTile);
 		}
 
 
@@ -111,7 +113,9 @@ public class LevelState
 			{
 				return Tiles[coord];
 			}
-			return new Tile(); //empty tile
+			Tile newTile = new Tile(this);
+			Tiles.Add(coord, newTile);
+			return newTile; 
 		}
 	}
 

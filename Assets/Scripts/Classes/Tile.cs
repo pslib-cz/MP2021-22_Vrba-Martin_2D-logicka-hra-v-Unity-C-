@@ -2,14 +2,12 @@ using System.Collections.Generic;
 
 public class Tile
 {
-	public Tile()
-	{
-		Entities = new List<Entity>();
-	}
+	private LevelState state;
 
-	public Tile(Entity entity)
+	public Tile(LevelState state)
 	{
-		Entities = new List<Entity>() { entity };
+		this.state = state;
+		Entities = new List<Entity>();
 	}
 
 
@@ -18,10 +16,12 @@ public class Tile
 	public void Add(Entity entity)
 	{
 		Entities.Add(entity);
-		if(entity is Box)
-		{
-			this.Box = entity as Box;
-		}
+	}
+
+	public void Update(Entity entity)
+	{
+		state[entity.Position].Add(entity);
+		Entities.Remove(entity);
 	}
 
 	public bool Opened
@@ -49,20 +49,20 @@ public class Tile
 		}
 	}
 
-	public bool HasBox
+
+	public Box Box 
 	{
-		get
+		get 
 		{
 			foreach (Entity entity in Entities)
 			{
 				if (entity is Box)
 				{
-					return true;
+					return entity as Box;
 				}
 			}
-			return false;
-		}
+			return null;
+		} 
 	}
-	public Box Box { get; private set; }
 
 }

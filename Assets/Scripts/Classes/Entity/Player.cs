@@ -4,11 +4,12 @@ public class Player : Entity, IDirectionFacingEntity, IMovingEntity
 {
 	#region Constructors
 	private Player() { }
-	public Player(EntityConstructor ec, GameObject o)
+	public Player(EntityConstructor ec, GameObject o, LevelState state)
 	{
 		this.direction = ec.Direction;
 		this.Position = new Coordinates(ec.CoordinateX, ec.CoordinateY);
 		this.MappedObject = o;
+		this.state = state;
 		FindRenderer();
 	}
 	public Player Copy()
@@ -17,8 +18,9 @@ public class Player : Entity, IDirectionFacingEntity, IMovingEntity
 		output.direction = this.direction;
 		output.Position = this.Position;
 		output.MappedObject = this.MappedObject;
-		output.FindRenderer();
+		output.state = this.state;
 
+		output.FindRenderer();
 		return output;
 	}
 	#endregion
@@ -42,7 +44,9 @@ public class Player : Entity, IDirectionFacingEntity, IMovingEntity
 	{
 		//Debug.Log("playe moved");
 		//Debug.Log(destination.x+" - "+destination.y);
+		Coordinates previous = Position;
 		this.Position = destination;
+		state[previous].Update(this);
 	}
 	#endregion
 	#region PerformTick
@@ -53,23 +57,11 @@ public class Player : Entity, IDirectionFacingEntity, IMovingEntity
 			///change direction
 			SetDirection(input);
 
-			/*///move if possible
-			bool canMove = false;
-			if (state[LookingAt()].Opened)
-			{
-				canMove = true;
-				// ...
-			}
-			// will add boxes and stuff later
-			if (canMove)
-			{
-				Move(LookingAt());
-			}*/
 			Tile destination = state[LookingAt()];
 
 			if (destination.Opened)
 			{
-				if (destination.HasBox)
+				if (destination.Box != null)
 				{
 					Box box = destination.Box;
 					if (box.Push(state,direction))
@@ -110,7 +102,7 @@ public class Player : Entity, IDirectionFacingEntity, IMovingEntity
 		sprites.Add("right", Resources.Load<Sprite>("Sprites/player/player_right_128"));
 		sprites.Add("left", Resources.Load<Sprite>("Sprites/player/player_left_128") );
 
-		Debug.Log("sprites length " + sprites.Count);
+		//Debug.Log("sprites length " + sprites.Count);
 		#endregion
 	}
 

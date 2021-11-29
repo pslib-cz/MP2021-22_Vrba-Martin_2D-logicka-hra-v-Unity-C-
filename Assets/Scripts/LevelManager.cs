@@ -63,12 +63,12 @@ public class LevelManager : MonoBehaviour
 
 				case TileType.Player:
                     newObject = Instantiate(prefabPlayer);
-                    newEntity = new Player(constructor, newObject);
+                    newEntity = new Player(constructor, newObject, levelState);
                     break;
 
 				case TileType.Box:
                     newObject = Instantiate(prefabBox);
-                    newEntity = new Box(constructor, newObject);
+                    newEntity = new Box(constructor, newObject, levelState);
 					break;
 				case TileType.Button:
 					break;

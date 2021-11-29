@@ -7,6 +7,7 @@ public abstract class Entity
 {
     public GameObject MappedObject;
     public Coordinates Position;
+    protected LevelState state;
 
 
     public virtual void PerformTick(LevelState state, Direction input)
