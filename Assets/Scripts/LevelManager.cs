@@ -110,7 +110,7 @@ public class LevelManager : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.P))
             {
-                LoadLevel("cool");
+                LoadLevel("minicosmos_01");
             }
             #endregion
 

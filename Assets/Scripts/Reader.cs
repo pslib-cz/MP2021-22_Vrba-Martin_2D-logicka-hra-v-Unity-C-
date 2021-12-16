@@ -17,7 +17,9 @@ public class Reader : MonoBehaviour
         //level =  ...
 
         savePath = Application.dataPath + "/Levels/";
-
+        
+        
+        /*
         //read("level1");
 
         SavedLevel testt = new SavedLevel()
@@ -30,7 +32,7 @@ public class Reader : MonoBehaviour
         testt.Entities[1] = new EntityConstructor() { T = TileType.Floor, CoordinateX = 1, CoordinateY = 1 };
         testt.Entities[2] = new EntityConstructor() { T = TileType.Player, CoordinateX = 1, CoordinateY = 2, Direction = Direction.Up };
 
-        save(testt);
+        save(testt);*/
     }
 
     //public SavedLevel ReadLevel(string name)
