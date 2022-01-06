@@ -1,37 +1,38 @@
-using System;
 using System.Collections.Generic;
 
 
 public class LevelState
 {
+    public int id; //for testing
 
-	private IDictionary<Coordinates, Tile> Tiles;
+    private IDictionary<Coordinates, Tile> Tiles;
 
-	public Player Player { get; private set; }
-	public List<Wall> Walls { get; private set; }
-	public List<Floor> Floors { get; private set; }
-	public List<Box> Boxes { get; private set; }
-	public List<Button> Buttons { get; private set; }
-
-
-
-	public void Add(Entity entity)
-	{
-		//add the entity to the main dictionary
-		if (Tiles.ContainsKey(entity.Position))
-		{
-			Tiles[entity.Position].Add(entity);
-		}
-		else
-		{
-			Tile newTile = new Tile(this);
-			newTile.Add(entity);
-			Tiles.Add(entity.Position, newTile);
-		}
+    public Player Player { get; private set; }
+    public List<Wall> Walls { get; private set; }
+    public List<Floor> Floors { get; private set; }
+    public List<Box> Boxes { get; private set; }
+    public List<Storage> Storages { get; private set; }
+    public List<Button> Buttons { get; private set; }
 
 
 
-		/*
+    public void Add(Entity entity)
+    {
+        //add the entity to the main dictionary
+        if (Tiles.ContainsKey(entity.Position))
+        {
+            Tiles[entity.Position].Add(entity);
+        }
+        else
+        {
+            Tile newTile = new Tile(this);
+            newTile.Add(entity);
+            Tiles.Add(entity.Position, newTile);
+        }
+
+
+
+        /*
 		 https://www.thomasclaudiushuber.com/2021/02/25/c-9-0-pattern-matching-in-switch-expressions/
 		 
 		switch (obj.GetType().Name)
@@ -48,41 +49,41 @@ public class LevelState
 		}
 		*/
 
-		switch (entity.GetType().Name)
-		{
-			case nameof(Player):
-				Player = entity as Player;
-				break;
+        switch (entity.GetType().Name)
+        {
+            case nameof(Player):
+                Player = entity as Player;
+                break;
 
-			case nameof(Wall):
-				Walls.Add(entity as Wall);
-				break;
+            case nameof(Wall):
+                Walls.Add(entity as Wall);
+                break;
 
-			case nameof(Floor):
-				Floors.Add(entity as Floor);
-				break;
-
-
-			case nameof(Box):
-				Boxes.Add(entity as Box);
-				break;
+            case nameof(Floor):
+                Floors.Add(entity as Floor);
+                break;
 
 
-			case nameof(Button):
-				Buttons.Add(entity as Button);
-				break;
+            case nameof(Box):
+                Boxes.Add(entity as Box);
+                break;
 
 
+            case nameof(Button):
+                Buttons.Add(entity as Button);
+                break;
 
 
 
 
-			default:
-				throw new System.Exception("unknown type");
-		}
 
 
-		/*
+            default:
+                throw new System.Exception("unknown type");
+        }
+
+
+        /*
 		if (entity is Player)
 			Player = entity as Player;
 
@@ -101,24 +102,27 @@ public class LevelState
 		if (entity is Floor)
 			Walls.Add(entity as Wall);
 		*/
-		//magic happens here, TODO adding to each list
-	}
-	
-	public Tile this[Coordinates coord]
-	{
-		get
-		{
-			if (Tiles.ContainsKey(coord))
-			{
-				return Tiles[coord];
-			}
-			Tile newTile = new Tile(this);
-			Tiles.Add(coord, newTile);
-			return newTile; 
-		}
-	}
+        //magic happens here, TODO adding to each list
+    }
 
-	/*
+    public Tile this[Coordinates coord]
+    {
+        get
+        {
+            if (Tiles.ContainsKey(coord))
+            {
+                return Tiles[coord];
+            }
+            else
+            {
+                Tile newTile = new Tile(this);
+                Tiles.Add(coord, newTile);
+                return newTile;
+            }
+        }
+    }
+
+    /*
 	public bool Has<T>(Coordinates coordinates)
 	{
 		if (!Tiles.ContainsKey(coordinates)) return false;
@@ -137,7 +141,7 @@ public class LevelState
 	}
 
 	public Get<T>(Coordinates coordinates)/* where T : class // might change*/
-	/*{
+    /*{
 		if (!Entities.ContainsKey(coordinates)) return default(T);
 
 		IList<Entity> tile = Entities[coordinates];
@@ -153,29 +157,45 @@ public class LevelState
 	}*/
 
 
-	public LevelState Copy(/*LevelState original*/)
-	{
-		///create new instance of every changing entity
-		LevelState newState = new LevelState(); //newstate is actually a static copy that will not change (will be stored in History)
+    public LevelState Copy(/*LevelState original*/)
+    {
+        ///create new instance of every entity
+        LevelState newState = new LevelState(); //newstate is actually a static copy that will not change (will be stored in History)
 
-		newState.Add(Player.Copy(this));
-
-
-		 
-		foreach (Box box in Boxes)
-		{
-			newState.Boxes.Add(box.Copy(this));
-		}
-
-		///more changing entities
+        //testing
+        newState.id = this.id + 1;
 
 
-		return newState;
+        newState.Add(Player.Copy(this));
 
 
 
+        foreach (Box box in Boxes)
+        {
+            newState.Add(box.Copy(this));
+        }
 
-		/*	this.Player = original.Player.Copy();
+        foreach (Floor floor in Floors)
+        {
+            newState.Add(floor.Copy(this));
+        }
+
+        foreach (Wall wall in Walls)
+        {
+            newState.Add(wall.Copy(this));
+        }
+
+
+        ///more entities
+
+
+
+        return newState;
+
+
+
+
+        /*	this.Player = original.Player.Copy();
 
 			this.Boxes = new List<Box>();
 			foreach (Box box in original.Boxes)
@@ -189,27 +209,28 @@ public class LevelState
 
 			this.Tiles = new Dictionary<Coordinates, Tile>(original.Tiles);
 		*/
-	}
+    }
 
 
 
-	public LevelState()
-	{
-		this.Player = null;
-		this.Walls = new List<Wall>();
-		this.Boxes = new List<Box>();
-		this.Buttons = new List<Button>();
-		this.Floors = new List<Floor>();
+    public LevelState()
+    {
+        this.id = 0;
+        this.Player = null;
+        this.Walls = new List<Wall>();
+        this.Boxes = new List<Box>();
+        this.Buttons = new List<Button>();
+        this.Floors = new List<Floor>();
 
-		this.Tiles = new Dictionary<Coordinates, Tile>();
-
-
-	}
+        this.Tiles = new Dictionary<Coordinates, Tile>();
 
 
+    }
 
 
-	/*public LevelState(List<GameObject> entities)
+
+
+    /*public LevelState(List<GameObject> entities)
     {
         //Entities = new List<Entity>();
 
@@ -218,4 +239,9 @@ public class LevelState
 
 		}
     }*/
+
+    public override string ToString()
+    {
+        return "LevelState "+id;
+    }
 }

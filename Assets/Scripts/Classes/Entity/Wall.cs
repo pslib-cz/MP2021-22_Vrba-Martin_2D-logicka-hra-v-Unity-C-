@@ -10,6 +10,17 @@ public class Wall : Entity, IObstacle
 		this.Position = new Coordinates(ec.CoordinateX, ec.CoordinateY);
 	}
 
+	public Wall () { }
+
+	public Wall Copy(LevelState original)
+	{
+		Wall wall = new Wall();
+		wall.MappedObject = this.MappedObject;
+		wall.Position = this.Position;
+		wall.state = original;
+		return wall;
+	}
+
 	#region IObstacle
 	public bool Opened { get { return false; } }
 	public void Open(bool open)

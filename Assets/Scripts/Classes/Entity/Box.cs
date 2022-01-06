@@ -34,6 +34,7 @@ public class Box : Entity, IMovingEntity
 		Coordinates previous = Position;
 		this.Position = destination;
 		state[previous].Update(this);
+		state[Position].Update(this);
 	}
 	
 	/*public Box Copy()
