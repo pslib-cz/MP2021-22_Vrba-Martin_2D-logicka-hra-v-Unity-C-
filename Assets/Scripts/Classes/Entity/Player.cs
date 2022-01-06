@@ -12,13 +12,13 @@ public class Player : Entity, IDirectionFacingEntity, IMovingEntity
 		this.state = state;
 		FindRenderer();
 	}
-	public Player Copy()
+	public Player Copy(LevelState state)
 	{
 		Player output = new Player();
 		output.direction = this.direction;
 		output.Position = this.Position;
 		output.MappedObject = this.MappedObject;
-		output.state = this.state;
+		output.state = state;
 
 		output.FindRenderer();
 		return output;
@@ -50,7 +50,7 @@ public class Player : Entity, IDirectionFacingEntity, IMovingEntity
 	}
 	#endregion
 	#region PerformTick
-	public override void PerformTick(LevelState state, Direction input)
+	public override void PerformTick(Direction input)
 	{
 		if (input != Direction.None)
 		{

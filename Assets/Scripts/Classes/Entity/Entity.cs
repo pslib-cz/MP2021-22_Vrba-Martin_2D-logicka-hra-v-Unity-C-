@@ -10,7 +10,7 @@ public abstract class Entity
     protected LevelState state;
 
 
-    public virtual void PerformTick(LevelState state, Direction input)
+    public virtual void PerformTick(Direction input)
     {
         throw new NotImplementedException();
     }

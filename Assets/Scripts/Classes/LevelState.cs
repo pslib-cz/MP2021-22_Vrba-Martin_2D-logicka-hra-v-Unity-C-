@@ -79,7 +79,6 @@ public class LevelState
 
 			default:
 				throw new System.Exception("unknown type");
-				break;
 		}
 
 
@@ -154,17 +153,42 @@ public class LevelState
 	}*/
 
 
-	public LevelState(LevelState original)
+	public LevelState Copy(/*LevelState original*/)
 	{
+		///create new instance of every changing entity
+		LevelState newState = new LevelState(); //newstate is actually a static copy that will not change (will be stored in History)
 
-		this.Player = original.Player.Copy();
+		newState.Add(Player.Copy(this));
 
-		this.Walls = new List<Wall>(original.Walls);
-		this.Boxes = new List<Box>(original.Boxes);
-		this.Buttons = new List<Button>(original.Buttons);
-		this.Floors = new List<Floor>(original.Floors);
-		
-		this.Tiles = new Dictionary<Coordinates, Tile>(original.Tiles);
+
+		 
+		foreach (Box box in Boxes)
+		{
+			newState.Boxes.Add(box.Copy(this));
+		}
+
+		///more changing entities
+
+
+		return newState;
+
+
+
+
+		/*	this.Player = original.Player.Copy();
+
+			this.Boxes = new List<Box>();
+			foreach (Box box in original.Boxes)
+			{
+				this.Boxes.Add(box.Copy(original));
+			}
+
+			this.Walls = new List<Wall>(original.Walls);
+			this.Buttons = new List<Button>(original.Buttons);
+			this.Floors = new List<Floor>(original.Floors);
+
+			this.Tiles = new Dictionary<Coordinates, Tile>(original.Tiles);
+		*/
 	}
 
 

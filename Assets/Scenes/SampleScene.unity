@@ -235,7 +235,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bd44ebf45c52b54280bdbf7ab1ed90e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levels: []
   prefabFloor: {fileID: 498565729258010432, guid: 01f7c6232fef6f246b5801871920aa23, type: 3}
   prefabPlayer: {fileID: 4093860770378320949, guid: 305348382bac85b439aaef217c4a71aa, type: 3}
   prefabWall: {fileID: 4786796519797916001, guid: d514b1c422c9cd74f947018446300c3e, type: 3}

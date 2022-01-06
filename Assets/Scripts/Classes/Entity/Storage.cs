@@ -2,13 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum TileType
+public class Storage : Entity
 {
-	Floor,
-	Wall,
-	Player,
-	Box,
-	Storage,
-	Button,
-	Door
+    
 }

@@ -13,8 +13,6 @@ public class LevelManager : MonoBehaviour
 
     const float tileSize = 1.28f;
 
-    public List<TextAsset> levels;
-
 	public int LevelID { get; set; }
     public bool LevelLoaded { get; set; }
     private TextAsset LevelTextAsset { get; set; }
@@ -150,6 +148,13 @@ public class LevelManager : MonoBehaviour
                 doTick = true;
             }
 
+            //undo
+            if (Input.GetKeyDown(KeyCode.Z))
+            {
+                doTick = false;
+                Undo();
+            }
+
 			if (doTick)
 			{
                 Tick(pressed);
@@ -157,14 +162,24 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    void Undo()
+    {
+        level = History.Pop();
+        Render();
+    }
+
     void Tick(Direction pressed)
 	{
-        History.Push(new LevelState(level));
-        level.Player.PerformTick(level, pressed);
+
+        History.Push(level);
+        level = level.Copy();
+
+        level.Player.PerformTick(pressed);
 		foreach (Button button in level.Buttons)
 		{
-            button.PerformTick(level, pressed);
+            button.PerformTick(pressed);
 		}
+        
         Render();
 	}
 

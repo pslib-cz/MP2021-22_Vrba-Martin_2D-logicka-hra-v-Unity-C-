@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class Box : Entity, IMovingEntity
 {
+	private Box()
+    {
+
+    }
+
 	public Box(EntityConstructor ec, GameObject o, LevelState state)
 	{
 		this.state = state;
@@ -30,4 +35,26 @@ public class Box : Entity, IMovingEntity
 		this.Position = destination;
 		state[previous].Update(this);
 	}
+	
+	/*public Box Copy()
+    {
+		return Copy(state);
+    }*/
+
+	public Box Copy(LevelState newState)
+    {
+		Box box = new Box();
+		box.MappedObject = MappedObject;
+		box.Position = Position;
+
+		box.state = newState;
+
+		return box;
+
+
+	/*	Box newbox = new Box();
+		newbox.MappedObject = this.MappedObject;
+	*/
+    }
+
 }
