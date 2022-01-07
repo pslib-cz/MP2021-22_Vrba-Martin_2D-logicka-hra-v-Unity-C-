@@ -166,23 +166,23 @@ public class LevelState
         newState.id = this.id + 1;
 
 
-        newState.Add(Player.Copy(this));
+        newState.Add(Player.Copy(newState));
 
 
 
         foreach (Box box in Boxes)
         {
-            newState.Add(box.Copy(this));
+            newState.Add(box.Copy(newState));
         }
 
         foreach (Floor floor in Floors)
         {
-            newState.Add(floor.Copy(this));
+            newState.Add(floor.Copy(newState));
         }
 
         foreach (Wall wall in Walls)
         {
-            newState.Add(wall.Copy(this));
+            newState.Add(wall.Copy(newState));
         }
 
 

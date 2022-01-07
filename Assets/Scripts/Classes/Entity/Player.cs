@@ -12,13 +12,13 @@ public class Player : Entity, IDirectionFacingEntity, IMovingEntity
 		this.state = state;
 		FindRenderer();
 	}
-	public Player Copy(LevelState state)
+	public Player Copy(LevelState newstate)
 	{
 		Player output = new Player();
 		output.direction = this.direction;
 		output.Position = this.Position;
 		output.MappedObject = this.MappedObject;
-		output.state = state;
+		output.state = newstate;
 
 		output.FindRenderer();
 		return output;
@@ -135,5 +135,12 @@ public class Player : Entity, IDirectionFacingEntity, IMovingEntity
 				break;
 		}
 	}
-	#endregion
+    #endregion
+
+
+	//for testing
+    public override string ToString()
+    {
+        return "Player "+state.id;
+    }
 }
