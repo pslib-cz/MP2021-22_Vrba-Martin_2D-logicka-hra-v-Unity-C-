@@ -13,6 +13,7 @@ public class LevelState
     public List<Box> Boxes { get; private set; }
     public List<Storage> Storages { get; private set; }
     public List<Button> Buttons { get; private set; }
+    public List<Button> Doors { get; private set; }
 
 
 
@@ -68,11 +69,19 @@ public class LevelState
                 Boxes.Add(entity as Box);
                 break;
 
+            case nameof(Storage):
+                Storages.Add(entity as Storage);
+                break;
+
 
             case nameof(Button):
                 Buttons.Add(entity as Button);
                 break;
 
+
+           /* case nameof(Door):
+                Doors.Add(entity as Door);
+                break;*/
 
 
 
@@ -185,6 +194,11 @@ public class LevelState
             newState.Add(wall.Copy(newState));
         }
 
+        foreach (Storage storage in Storages)
+        {
+            newState.Add(storage.Copy(newState));
+        }
+
 
         ///more entities
 
@@ -221,6 +235,8 @@ public class LevelState
         this.Boxes = new List<Box>();
         this.Buttons = new List<Button>();
         this.Floors = new List<Floor>();
+        this.Storages = new List<Storage>();
+        
 
         this.Tiles = new Dictionary<Coordinates, Tile>();
 

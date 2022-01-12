@@ -8,7 +8,8 @@ public abstract class Entity
     public GameObject MappedObject;
     public Coordinates Position;
     protected LevelState state;
-
+    protected SpriteRenderer renderer;
+    protected Dictionary<string, Sprite> sprites;
 
     public virtual void PerformTick(Direction input)
     {
@@ -19,6 +20,11 @@ public abstract class Entity
 	{
         throw new NotImplementedException();
 	}
+
+    protected virtual void SetSprite(string name)
+    {
+        renderer.sprite = sprites[name];
+    }
     /*public Entity(EntityConstructor ec)
     {
         throw new NotImplementedException();

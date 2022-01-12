@@ -22,6 +22,7 @@ public class LevelManager : MonoBehaviour
     public GameObject prefabPlayer; 
     public GameObject prefabWall;
     public GameObject prefabBox;
+    public GameObject prefabStorage;
 
     public List<GameObject> Environment;
 
@@ -68,7 +69,9 @@ public class LevelManager : MonoBehaviour
                     newObject = Instantiate(prefabBox);
                     newEntity = new Box(constructor, newObject, levelState);
 					break;
-				case TileType.Button:
+				case TileType.Storage:
+                    newObject = Instantiate(prefabStorage);
+                    newEntity = new Storage(constructor, newObject, levelState);
 					break;
 				default:
                     throw new System.NotImplementedException("unknown tile type");
@@ -188,24 +191,44 @@ public class LevelManager : MonoBehaviour
         int z = 0; //floor level
 		foreach (Floor floor in level.Floors)
 		{
-            floor.MappedObject.transform.position = new Vector3(floor.Position.x, floor.Position.y, z) * tileSize;
+            RenderTile(floor, z);
 		}
 
 
         z = -1; //object level
-        level.Player.MappedObject.transform.position = new Vector3(level.Player.Position.x, level.Player.Position.y, z) * tileSize;
-        level.Player.UpdateSprite();
+        RenderTile(level.Player, z);
         
         foreach (Wall wall in level.Walls)
 		{
-            wall.MappedObject.transform.position = new Vector3(wall.Position.x, wall.Position.y, z) * tileSize;
-		}
+            RenderTile(wall, z);
+        }
         
         foreach (Box box in level.Boxes)
 		{
-            box.MappedObject.transform.position = new Vector3(box.Position.x, box.Position.y, z) * tileSize;
-		}
+            RenderTile(box, z);
+        }
+
+        foreach (Storage storage in level.Storages)
+        {
+            RenderTile(storage, z);
+        }
 
 	}
+
+    void RenderTile(Entity entity, int z)
+    {
+        entity.MappedObject.transform.position = new Vector3(entity.Position.x, entity.Position.y, z) * tileSize;
+
+        try
+        {
+            entity.UpdateSprite();
+        }
+        catch (System.NotImplementedException)
+        {
+            Debug.Log(entity + "doesnt have sprite update method");
+        }
+        
+
+    }
 
 }

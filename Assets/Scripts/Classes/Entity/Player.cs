@@ -88,8 +88,8 @@ public class Player : Entity, IDirectionFacingEntity, IMovingEntity
 	}
 	#endregion
 	#region UpdateSprite
-	private SpriteRenderer renderer;
-	private Dictionary<string, Sprite> sprites;
+	//private SpriteRenderer renderer;
+	//private Dictionary<string, Sprite> sprites;
 	private void FindRenderer()
 	{
 		renderer = MappedObject.GetComponent<SpriteRenderer>();
@@ -106,10 +106,10 @@ public class Player : Entity, IDirectionFacingEntity, IMovingEntity
 		#endregion
 	}
 
-	private void SetSprite(string name)
+	/*private void SetSprite(string name)
 	{
 		renderer.sprite = sprites[name];
-	}
+	}*/
 
 	public override void UpdateSprite()
 	{

@@ -239,6 +239,7 @@ MonoBehaviour:
   prefabPlayer: {fileID: 4093860770378320949, guid: 305348382bac85b439aaef217c4a71aa, type: 3}
   prefabWall: {fileID: 4786796519797916001, guid: d514b1c422c9cd74f947018446300c3e, type: 3}
   prefabBox: {fileID: 8713690274749542145, guid: 89ac783d235908949acede584328bd62, type: 3}
+  prefabStorage: {fileID: 6950026790951456913, guid: 037767b1068e7e04a8375a4b69369db4, type: 3}
   Environment: []
 --- !u!4 &601805774
 Transform:
