@@ -182,8 +182,13 @@ public class LevelManager : MonoBehaviour
 		{
             button.PerformTick(pressed);
 		}
-        
+
         Render();
+
+        if (level.Solved)
+        {
+            Debug.Log("THE LEVEL IS SOLVED");
+        }
 	}
 
     void Render()

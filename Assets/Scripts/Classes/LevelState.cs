@@ -15,7 +15,22 @@ public class LevelState
     public List<Button> Buttons { get; private set; }
     public List<Button> Doors { get; private set; }
 
-
+    public bool Solved
+    {
+        get
+        {
+            bool solved = true;
+            foreach (Storage storage in Storages)
+            {
+                if (this[storage.Position].Box == null)
+                {
+                    solved = false;
+                    break;
+                }
+            }
+            return solved;
+        }
+    }
 
     public void Add(Entity entity)
     {
@@ -79,9 +94,9 @@ public class LevelState
                 break;
 
 
-           /* case nameof(Door):
-                Doors.Add(entity as Door);
-                break;*/
+            /* case nameof(Door):
+                 Doors.Add(entity as Door);
+                 break;*/
 
 
 
@@ -236,7 +251,7 @@ public class LevelState
         this.Buttons = new List<Button>();
         this.Floors = new List<Floor>();
         this.Storages = new List<Storage>();
-        
+
 
         this.Tiles = new Dictionary<Coordinates, Tile>();
 
@@ -258,6 +273,6 @@ public class LevelState
 
     public override string ToString()
     {
-        return "LevelState "+id;
+        return "LevelState " + id;
     }
 }

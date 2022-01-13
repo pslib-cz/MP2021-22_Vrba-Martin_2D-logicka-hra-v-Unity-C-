@@ -21,8 +21,13 @@ public class Wall : Entity, IObstacle
 		return wall;
 	}
 
-	#region IObstacle
-	public bool Opened { get { return false; } }
+    public override void UpdateSprite()
+    {
+        //wall doesnt change its sprite
+    }
+
+    #region IObstacle
+    public bool Opened { get { return false; } }
 	public void Open(bool open)
 	{
 		return; //wall cannot be opened

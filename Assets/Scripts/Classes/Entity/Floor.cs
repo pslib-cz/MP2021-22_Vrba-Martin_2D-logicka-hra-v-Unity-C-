@@ -19,5 +19,10 @@ public class Floor : Entity
 		floor.Position = this.Position;
 		floor.state = original;
 		return floor;
+    } 
+
+    public override void UpdateSprite()
+    {
+		//wall doesnt update sprite
     }
 }

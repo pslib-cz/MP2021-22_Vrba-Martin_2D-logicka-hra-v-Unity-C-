@@ -58,4 +58,9 @@ public class Box : Entity, IMovingEntity
 	*/
     }
 
+    public override void UpdateSprite()
+    {
+		//box doesnt update sprite
+    }
+
 }
