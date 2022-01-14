@@ -8,15 +8,15 @@ using System.IO;
 public class Reader : MonoBehaviour
 {
     private SavedLevel level;
-    private string savePath;
-    const string ext = ".txt";
+    //private string savePath;
+    //const string ext = ".txt";
 
     // Start is called before the first frame update
     void Start()
     {
         //level =  ...
 
-        savePath = Application.dataPath + "/Levels/";
+        //savePath = Application.dataPath + "/Levels/";
         
         
         /*
@@ -37,8 +37,21 @@ public class Reader : MonoBehaviour
 
     //public SavedLevel ReadLevel(string name)
     public SavedLevel read(string file){
-        StreamReader reader = new StreamReader(savePath + file + ext);
-        string jsonLevel = reader.ReadToEnd();
+
+        string jsonLevel;
+        try
+        {
+        jsonLevel = Resources.Load<TextAsset>("Levels/" + file).text;
+
+        }
+        catch (System.Exception)
+        {
+
+            throw;
+        }
+        //StreamReader reader = new StreamReader(savePath + file + ext);
+        
+        //string jsonLevel = reader.ReadToEnd();
         //Debug.Log(jsonLevel);
         //Debug.Log(jsonLevel);
 		try
@@ -53,14 +66,14 @@ public class Reader : MonoBehaviour
 		}
 	}
 
-    public void save(SavedLevel level)
+    /*public void save(SavedLevel level)
 	{
         StreamWriter writer = new StreamWriter(savePath + level.Name + ext);
         string jsonLevel = JsonUtility.ToJson(level);
         //Debug.Log(jsonLevel);
         writer.Write(jsonLevel);
         writer.Close();
-	}
+	}*/
    
 
 

@@ -106,7 +106,7 @@ public class LevelManager : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.O))
 			{
-                LoadLevel("boxtest");
+                LoadLevel("81_25");
             }
 
             if (Input.GetKeyDown(KeyCode.P))
