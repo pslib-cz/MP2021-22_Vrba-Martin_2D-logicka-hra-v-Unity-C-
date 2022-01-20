@@ -101,7 +101,7 @@ public class LevelManager : MonoBehaviour
             #region DEBUG
             if (Input.GetKeyDown(KeyCode.I))
             {
-                LoadLevel("sus");
+                LoadLevel("94_11");
             }
 
             if (Input.GetKeyDown(KeyCode.O))
