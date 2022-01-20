@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 
 
@@ -13,99 +11,120 @@ public class LevelManager : MonoBehaviour
 
     const float tileSize = 1.28f;
 
-	public int LevelID { get; set; }
+    public int LevelID { get; set; }
     public bool LevelLoaded { get; set; }
     private TextAsset LevelTextAsset { get; set; }
     public string LevelName { get; set; }
 
     public GameObject prefabFloor;
-    public GameObject prefabPlayer; 
+    public GameObject prefabPlayer;
     public GameObject prefabWall;
     public GameObject prefabBox;
     public GameObject prefabStorage;
 
     public List<GameObject> Environment;
 
-    Reader reader;
+
+    TextAsset[] levelTexts;
+    //Reader reader;
     void Start()
     {
-        reader = Object.FindObjectOfType<Reader>();
+        //reader = Object.FindObjectOfType<Reader>();
         History = new Stack<LevelState>();
+        ReadAllLevels();
+        LoadLevel(0);
     }
 
-    void LoadLevel(string levelname)
-	{
-		foreach (GameObject thing in Environment) //clear the level
-		{
+    void ReadAllLevels()
+    {
+        levelTexts = Resources.LoadAll<TextAsset>("Levels/");
+
+    }
+
+    //void LoadLevel(string levelname)
+    void LoadLevel(int id)
+    {
+        foreach (GameObject thing in Environment) //clear the level
+        {
             Destroy(thing);
-		}
-        SavedLevel savedLevel = reader.read(levelname);
+        }
+        SavedLevel savedLevel;
+        try
+        {
+            savedLevel = JsonUtility.FromJson<SavedLevel>(levelTexts[id].text);
+        }
+        catch (System.Exception)
+        {
+            throw;
+        }
         LevelState levelState = new LevelState();
 
-		for (int i = 0; i < savedLevel.Entities.Length; i++)
-		{
+        for (int i = 0; i < savedLevel.Entities.Length; i++)
+        {
             EntityConstructor constructor = savedLevel.Entities[i];
 
             Entity newEntity = null;
             GameObject newObject = null;
-			switch (constructor.T)
-			{
-				case TileType.Floor:
+            switch (constructor.T)
+            {
+                case TileType.Floor:
                     newObject = Instantiate(prefabFloor);
                     newEntity = new Floor(constructor, newObject);
                     break;
 
-				case TileType.Wall:
+                case TileType.Wall:
                     newObject = Instantiate(prefabWall);
                     newEntity = new Wall(constructor, newObject);
                     break;
 
-				case TileType.Player:
+                case TileType.Player:
                     newObject = Instantiate(prefabPlayer);
                     newEntity = new Player(constructor, newObject, levelState);
                     break;
 
-				case TileType.Box:
+                case TileType.Box:
                     newObject = Instantiate(prefabBox);
                     newEntity = new Box(constructor, newObject, levelState);
-					break;
-				case TileType.Storage:
+                    break;
+                case TileType.Storage:
                     newObject = Instantiate(prefabStorage);
                     newEntity = new Storage(constructor, newObject, levelState);
-					break;
-				default:
+                    break;
+                default:
                     throw new System.NotImplementedException("unknown tile type");
-			}
+            }
 
-            
+
             Environment.Add(newObject);
             levelState.Add(newEntity);
 
-		}
+        }
 
         level = levelState;
 
+        LevelID = id;
+
         Render();
-	}
+    }
 
 
     // Update is called once per frame
     void Update()
     {
-		if (Input.anyKeyDown)
-		{
+        if (Input.anyKeyDown)
+        {
             Direction pressed = Direction.None;
             bool doTick = false;
             //Debug.Log("pressed something");
 
-            #region DEBUG
+            /*#region DEBUG
             if (Input.GetKeyDown(KeyCode.I))
             {
                 LoadLevel("94_11");
             }
 
             if (Input.GetKeyDown(KeyCode.O))
-			{
+            {
                 LoadLevel("81_25");
             }
 
@@ -113,7 +132,7 @@ public class LevelManager : MonoBehaviour
             {
                 LoadLevel("minicosmos_01");
             }
-            #endregion
+            #endregion*/
 
 
             if (Input.GetKeyDown(KeyCode.UpArrow))
@@ -122,14 +141,14 @@ public class LevelManager : MonoBehaviour
                 pressed = Direction.Up;
                 doTick = true;
             }
-            
+
             if (Input.GetKeyDown(KeyCode.DownArrow))
             {
                 //Debug.Log("pressed down");
                 pressed = Direction.Down;
                 doTick = true;
             }
-            
+
             if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
                 //Debug.Log("pressed left");
@@ -158,10 +177,10 @@ public class LevelManager : MonoBehaviour
                 Undo();
             }
 
-			if (doTick)
-			{
+            if (doTick)
+            {
                 Tick(pressed);
-			}
+            }
         }
     }
 
@@ -172,44 +191,45 @@ public class LevelManager : MonoBehaviour
     }
 
     void Tick(Direction pressed)
-	{
+    {
 
         History.Push(level);
         level = level.Copy();
 
         level.Player.PerformTick(pressed);
-		foreach (Button button in level.Buttons)
-		{
+        foreach (Button button in level.Buttons)
+        {
             button.PerformTick(pressed);
-		}
+        }
 
         Render();
 
         if (level.Solved)
         {
             Debug.Log("THE LEVEL IS SOLVED");
+            LoadLevel(LevelID + 1);
         }
-	}
+    }
 
     void Render()
-	{
+    {
         int z = 0; //floor level
-		foreach (Floor floor in level.Floors)
-		{
+        foreach (Floor floor in level.Floors)
+        {
             RenderTile(floor, z);
-		}
+        }
 
 
         z = -1; //object level
         RenderTile(level.Player, z);
-        
+
         foreach (Wall wall in level.Walls)
-		{
+        {
             RenderTile(wall, z);
         }
-        
+
         foreach (Box box in level.Boxes)
-		{
+        {
             RenderTile(box, z);
         }
 
@@ -218,7 +238,7 @@ public class LevelManager : MonoBehaviour
             RenderTile(storage, z);
         }
 
-	}
+    }
 
     void RenderTile(Entity entity, int z)
     {
@@ -230,9 +250,10 @@ public class LevelManager : MonoBehaviour
         }
         catch (System.NotImplementedException)
         {
-            Debug.Log(entity + "doesnt have sprite update method");
+            Debug.Log(entity + " " +
+                "doesnt have sprite update method");
         }
-        
+
 
     }
 
