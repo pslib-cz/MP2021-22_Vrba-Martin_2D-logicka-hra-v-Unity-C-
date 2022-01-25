@@ -1,1 +1,0 @@
-{"Name":"testt","Entities":[{"T":1,"CoordinateX":1,"CoordinateY":0,"Direction":0,"Opened":false},{"T":0,"CoordinateX":1,"CoordinateY":1,"Direction":0,"Opened":false},{"T":2,"CoordinateX":1,"CoordinateY":2,"Direction":1,"Opened":false}]}
