@@ -24,12 +24,14 @@ public class LevelManager : MonoBehaviour
 
     public List<GameObject> Environment;
 
+    private PauseScreen pauseScreen;
 
     TextAsset[] levelTexts;
     //Reader reader;
     void Start()
     {
         //reader = Object.FindObjectOfType<Reader>();
+        pauseScreen = FindObjectOfType<PauseScreen>();
         History = new Stack<LevelState>();
         ReadAllLevels();
         LoadLevel(0);
@@ -113,6 +115,10 @@ public class LevelManager : MonoBehaviour
     {
         if (Input.anyKeyDown)
         {
+            if (pauseScreen.Paused)
+                return;
+
+
             Direction pressed = Direction.None;
             bool doTick = false;
             //Debug.Log("pressed something");
