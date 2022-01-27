@@ -2,7 +2,14 @@ using System.Collections.Generic;
 using UnityEngine;
 public class Player : Entity, IDirectionFacingEntity, IMovingEntity
 {
+
 	#region Constructors
+	void PrepareThings()
+    {
+		FindRenderer();
+		FindSound();
+    }
+
 	private Player() { }
 	public Player(EntityConstructor ec, GameObject o, LevelState state)
 	{
@@ -10,7 +17,7 @@ public class Player : Entity, IDirectionFacingEntity, IMovingEntity
 		this.Position = new Coordinates(ec.CoordinateX, ec.CoordinateY);
 		this.MappedObject = o;
 		this.state = state;
-		FindRenderer();
+		PrepareThings();
 	}
 	public Player Copy(LevelState newstate)
 	{
@@ -20,7 +27,7 @@ public class Player : Entity, IDirectionFacingEntity, IMovingEntity
 		output.MappedObject = this.MappedObject;
 		output.state = newstate;
 
-		output.FindRenderer();
+		output.PrepareThings();
 		return output;
 	}
 	#endregion
@@ -67,11 +74,13 @@ public class Player : Entity, IDirectionFacingEntity, IMovingEntity
 					if (box.Push(state,direction))
 					{
 						Move(Position + direction);
+						sound.Play("push");
 					}
 				}
 				else
 				{
 					Move(Position + direction);
+					sound.Play("step");
 				}
 			}
 
@@ -136,7 +145,14 @@ public class Player : Entity, IDirectionFacingEntity, IMovingEntity
 		}
 	}
     #endregion
+    #region sound
 
+    SoundManager sound;
+	void FindSound()
+    {
+		sound = Object.FindObjectOfType<SoundManager>();
+    }
+    #endregion
 
 	//for testing
     public override string ToString()

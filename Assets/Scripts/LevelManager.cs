@@ -46,6 +46,8 @@ public class LevelManager : MonoBehaviour
     //void LoadLevel(string levelname)
     void LoadLevel(int id)
     {
+        History = new Stack<LevelState>();
+
         foreach (GameObject thing in Environment) //clear the level
         {
             Destroy(thing);
@@ -115,9 +117,15 @@ public class LevelManager : MonoBehaviour
     {
         if (Input.anyKeyDown)
         {
-            if (pauseScreen.Paused)
+            if (Input.GetKeyDown(KeyCode.Escape))
                 return;
 
+            if (level.Solved)//checking here so that there is one frame before next level
+            {
+                //Debug.Log("THE LEVEL IS SOLVED");
+                LoadLevel(LevelID + 1);
+                return;
+            }
 
             Direction pressed = Direction.None;
             bool doTick = false;
@@ -183,6 +191,13 @@ public class LevelManager : MonoBehaviour
                 Undo();
             }
 
+            //restart
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                doTick = false;
+                Restart();
+            }
+
             if (doTick)
             {
                 Tick(pressed);
@@ -192,12 +207,21 @@ public class LevelManager : MonoBehaviour
 
     void Undo()
     {
-        level = History.Pop();
-        Render();
+        if (History.Count>0)
+        {
+            level = History.Pop();
+            Render();
+        }
+    }
+
+    void Restart()
+    {
+        LoadLevel(LevelID);//loads current level again
     }
 
     void Tick(Direction pressed)
     {
+
 
         History.Push(level);
         level = level.Copy();
@@ -210,11 +234,6 @@ public class LevelManager : MonoBehaviour
 
         Render();
 
-        if (level.Solved)
-        {
-            Debug.Log("THE LEVEL IS SOLVED");
-            LoadLevel(LevelID + 1);
-        }
     }
 
     void Render()
