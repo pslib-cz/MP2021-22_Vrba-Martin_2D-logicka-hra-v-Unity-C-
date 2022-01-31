@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,6 +27,9 @@ public class LevelManager : MonoBehaviour
 
     private PauseScreen pauseScreen;
 
+    private SoundManager sound;
+
+
     TextAsset[] levelTexts;
     //Reader reader;
     void Start()
@@ -35,6 +39,9 @@ public class LevelManager : MonoBehaviour
         History = new Stack<LevelState>();
         ReadAllLevels();
         LoadLevel(0);
+
+
+
     }
 
     void ReadAllLevels()
@@ -115,6 +122,16 @@ public class LevelManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (sound == null)
+        {
+            if (SoundManager.DoneLoading)
+            {
+                sound = FindObjectOfType<SoundManager>();
+                sound.PlayMusic("grid");
+            }
+        }
+
+
         if (Input.anyKeyDown)
         {
             if (Input.GetKeyDown(KeyCode.Escape))
@@ -207,7 +224,7 @@ public class LevelManager : MonoBehaviour
 
     void Undo()
     {
-        if (History.Count>0)
+        if (History.Count > 0)
         {
             level = History.Pop();
             Render();
@@ -230,6 +247,11 @@ public class LevelManager : MonoBehaviour
         foreach (Button button in level.Buttons)
         {
             button.PerformTick(pressed);
+        }
+
+        if (level.Solved)
+        {
+            sound.Play("solved");
         }
 
         Render();

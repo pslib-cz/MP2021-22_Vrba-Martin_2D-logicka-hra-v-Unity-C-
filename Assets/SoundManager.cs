@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class SoundManager : MonoBehaviour
 {
-    // Start is called before the first frame update
 
-    AudioClip[] clips;
     Dictionary<string, AudioSource> sounds;
-
+    Dictionary<string, AudioSource> music;
+    public static bool DoneLoading = false;
     void Start()
     {
+        AudioClip[] clips;
+        //sound effects
         clips = Resources.LoadAll<AudioClip>("Sounds/sfx/");
         sounds = new Dictionary<string, AudioSource>();
         foreach (AudioClip clip in clips)
@@ -19,6 +20,19 @@ public class SoundManager : MonoBehaviour
             newsound.clip = clip;
             sounds.Add(clip.name, newsound);
         }
+
+        //music
+        clips = Resources.LoadAll<AudioClip>("Sounds/music/");
+        music = new Dictionary<string, AudioSource>();
+        foreach (AudioClip clip in clips)
+        {
+            AudioSource newsound = gameObject.AddComponent<AudioSource>();
+            newsound.clip = clip;
+            newsound.loop = true;
+            music.Add(clip.name, newsound);
+        }
+
+        DoneLoading = true;
     }
 
     // Update is called once per frame
@@ -36,6 +50,28 @@ public class SoundManager : MonoBehaviour
         else
         {
         sounds[name].Play();
+        }
+    }
+    
+    public void PlayMusic(string name)
+    {
+        void StopAllMusic()
+        {
+            foreach (AudioSource audiosource in music.Values)
+            {
+                audiosource.Stop();
+            }
+        }
+
+        if (!music.ContainsKey(name))
+        {
+            Debug.LogWarning("There is no music called \"" + name + "\"");
+            return;
+        }
+        else
+        {
+            StopAllMusic();
+            music[name].Play();
         }
     }
 }
