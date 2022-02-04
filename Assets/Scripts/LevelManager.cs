@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,11 +16,7 @@ public class LevelManager : MonoBehaviour
     private TextAsset LevelTextAsset { get; set; }
     public string LevelName { get; set; }
 
-    public GameObject prefabFloor;
-    public GameObject prefabPlayer;
-    public GameObject prefabWall;
-    public GameObject prefabBox;
-    public GameObject prefabStorage;
+    public GameObject prefabEntity;
 
     public List<GameObject> Environment;
 
@@ -74,35 +69,32 @@ public class LevelManager : MonoBehaviour
         {
             EntityConstructor constructor = savedLevel.Entities[i];
 
+            GameObject newObject = Instantiate(prefabEntity);
+
             Entity newEntity = null;
-            GameObject newObject = null;
             switch (constructor.T)
             {
                 case TileType.Floor:
-                    newObject = Instantiate(prefabFloor);
                     newEntity = new Floor(constructor, newObject);
                     break;
 
                 case TileType.Wall:
-                    newObject = Instantiate(prefabWall);
                     newEntity = new Wall(constructor, newObject);
                     break;
 
                 case TileType.Player:
-                    newObject = Instantiate(prefabPlayer);
                     newEntity = new Player(constructor, newObject, levelState);
                     break;
 
                 case TileType.Box:
-                    newObject = Instantiate(prefabBox);
                     newEntity = new Box(constructor, newObject, levelState);
                     break;
                 case TileType.Storage:
-                    newObject = Instantiate(prefabStorage);
                     newEntity = new Storage(constructor, newObject, levelState);
                     break;
                 default:
                     throw new System.NotImplementedException("unknown tile type");
+
             }
 
 

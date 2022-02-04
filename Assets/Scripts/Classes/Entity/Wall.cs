@@ -21,10 +21,18 @@ public class Wall : Entity, IObstacle
 		return wall;
 	}
 
+	#region UpdateSprite
+	private bool generatedSprite = false;
     public override void UpdateSprite()
     {
-        //wall doesnt change its sprite
-    }
+		if (generatedSprite)
+			return;
+
+		MappedObject.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/wall/wall_128");
+
+		generatedSprite = true;
+	}
+	#endregion
 
     #region IObstacle
     public bool Opened { get { return false; } }

@@ -97,8 +97,6 @@ public class Player : Entity, IDirectionFacingEntity, IMovingEntity
 	}
 	#endregion
 	#region UpdateSprite
-	//private SpriteRenderer renderer;
-	//private Dictionary<string, Sprite> sprites;
 	private void FindRenderer()
 	{
 		renderer = MappedObject.GetComponent<SpriteRenderer>();
@@ -114,11 +112,6 @@ public class Player : Entity, IDirectionFacingEntity, IMovingEntity
 		//Debug.Log("sprites length " + sprites.Count);
 		#endregion
 	}
-
-	/*private void SetSprite(string name)
-	{
-		renderer.sprite = sprites[name];
-	}*/
 
 	public override void UpdateSprite()
 	{

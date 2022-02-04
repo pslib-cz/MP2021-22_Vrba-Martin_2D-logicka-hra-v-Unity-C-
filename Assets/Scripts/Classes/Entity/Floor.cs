@@ -19,10 +19,18 @@ public class Floor : Entity
 		floor.Position = this.Position;
 		floor.state = original;
 		return floor;
-    } 
-
-    public override void UpdateSprite()
-    {
-		//wall doesnt update sprite
     }
+
+	#region UpdateSprite
+	private bool generatedSprite = false;
+	public override void UpdateSprite()
+	{
+		if (generatedSprite)
+			return;
+
+		MappedObject.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/floor/floor_128");
+
+		generatedSprite = true;
+	}
+	#endregion
 }

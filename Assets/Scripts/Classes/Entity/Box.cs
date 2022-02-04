@@ -57,10 +57,16 @@ public class Box : Entity, IMovingEntity
 		newbox.MappedObject = this.MappedObject;
 	*/
     }
+	#region UpdateSprite
+	private bool generatedSprite = false;
+	public override void UpdateSprite()
+	{
+		if (generatedSprite)
+			return;
 
-    public override void UpdateSprite()
-    {
-		//box doesnt update sprite
-    }
+		MappedObject.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/box/box_128");
 
+		generatedSprite = true;
+	}
+    #endregion
 }
