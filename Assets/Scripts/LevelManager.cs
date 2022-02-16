@@ -19,9 +19,9 @@ public class LevelManager : MonoBehaviour
     public GameObject prefabEntity;
 
     public List<GameObject> Environment;
+    public SpriteRenderer EndScreen;
 
     private PauseScreen pauseScreen;
-
     private SoundManager sound;
 
 
@@ -31,6 +31,7 @@ public class LevelManager : MonoBehaviour
     {
         //reader = Object.FindObjectOfType<Reader>();
         pauseScreen = FindObjectOfType<PauseScreen>();
+        EndScreen.enabled = false;
         History = new Stack<LevelState>();
         ReadAllLevels();
         LoadLevel(0);
@@ -46,8 +47,13 @@ public class LevelManager : MonoBehaviour
     }
 
     //void LoadLevel(string levelname)
-    void LoadLevel(int id)
+    bool LoadLevel(int id)
     {
+        if (id < 0 || levelTexts.Length <= id)
+        {
+            return false;
+        }
+
         History = new Stack<LevelState>();
 
         foreach (GameObject thing in Environment) //clear the level
@@ -108,6 +114,7 @@ public class LevelManager : MonoBehaviour
         LevelID = id;
 
         Render();
+        return true;
     }
 
 
@@ -132,7 +139,10 @@ public class LevelManager : MonoBehaviour
             if (level.Solved)//checking here so that there is one frame before next level
             {
                 //Debug.Log("THE LEVEL IS SOLVED");
-                LoadLevel(LevelID + 1);
+
+                if (!LoadLevel(LevelID + 1))
+                    EndScreen.enabled = true;
+                
                 return;
             }
 
