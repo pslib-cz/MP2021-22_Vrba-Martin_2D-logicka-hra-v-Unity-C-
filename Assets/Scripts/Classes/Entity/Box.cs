@@ -4,10 +4,7 @@ using UnityEngine;
 
 public class Box : Entity, IMovingEntity
 {
-	private Box()
-    {
-
-    }
+	private Box(){}
 
 	public Box(EntityConstructor ec, GameObject o, LevelState state)
 	{
