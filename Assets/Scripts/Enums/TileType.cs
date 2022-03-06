@@ -8,7 +8,5 @@ public enum TileType
 	Wall,
 	Player,
 	Box,
-	Storage,
-	Button,
-	Door
+	Storage
 }

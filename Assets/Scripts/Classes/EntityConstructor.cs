@@ -16,6 +16,4 @@ public class EntityConstructor
 
 	//IObstacle
 	public bool Opened;
-
-
 }

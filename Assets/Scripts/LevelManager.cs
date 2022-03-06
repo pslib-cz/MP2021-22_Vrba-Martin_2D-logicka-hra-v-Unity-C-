@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
-    const string pathToLevels = "Assets/TimeGameAssets/Levels/";
+    const string path = "Levels/";
 
     Stack<LevelState> History;
     LevelState level;
@@ -13,7 +13,6 @@ public class LevelManager : MonoBehaviour
 
     public int LevelID { get; set; }
     public bool LevelLoaded { get; set; }
-    private TextAsset LevelTextAsset { get; set; }
     public string LevelName { get; set; }
 
     public GameObject prefabEntity;
@@ -26,10 +25,8 @@ public class LevelManager : MonoBehaviour
 
 
     TextAsset[] levelTexts;
-    //Reader reader;
     void Start()
     {
-        //reader = Object.FindObjectOfType<Reader>();
         pauseScreen = FindObjectOfType<PauseScreen>();
         EndScreen.enabled = false;
         History = new Stack<LevelState>();
@@ -42,11 +39,10 @@ public class LevelManager : MonoBehaviour
 
     void ReadAllLevels()
     {
-        levelTexts = Resources.LoadAll<TextAsset>("Levels/");
+        levelTexts = Resources.LoadAll<TextAsset>(path);
 
     }
 
-    //void LoadLevel(string levelname)
     bool LoadLevel(int id)
     {
         if (id < 0 || levelTexts.Length <= id)
@@ -118,7 +114,6 @@ public class LevelManager : MonoBehaviour
     }
 
 
-    // Update is called once per frame
     void Update()
     {
         if (sound == null)
@@ -138,8 +133,6 @@ public class LevelManager : MonoBehaviour
 
             if (level.Solved)//checking here so that there is one frame before next level
             {
-                //Debug.Log("THE LEVEL IS SOLVED");
-
                 if (!LoadLevel(LevelID + 1))
                     EndScreen.enabled = true;
                 
@@ -148,24 +141,7 @@ public class LevelManager : MonoBehaviour
 
             Direction pressed = Direction.None;
             bool doTick = false;
-            //Debug.Log("pressed something");
-
-            /*#region DEBUG
-            if (Input.GetKeyDown(KeyCode.I))
-            {
-                LoadLevel("94_11");
-            }
-
-            if (Input.GetKeyDown(KeyCode.O))
-            {
-                LoadLevel("81_25");
-            }
-
-            if (Input.GetKeyDown(KeyCode.P))
-            {
-                LoadLevel("minicosmos_01");
-            }
-            #endregion*/
+           
 
 
             if (Input.GetKeyDown(KeyCode.UpArrow))

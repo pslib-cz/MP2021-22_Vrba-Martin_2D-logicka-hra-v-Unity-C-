@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IPushable : MonoBehaviour
+public interface IPushable
 {
-
+    bool Push(Direction direction);
 }

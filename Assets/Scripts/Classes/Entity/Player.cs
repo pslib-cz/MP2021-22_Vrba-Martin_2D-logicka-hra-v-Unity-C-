@@ -71,7 +71,7 @@ public class Player : Entity, IDirectionFacingEntity, IMovingEntity
 				if (destination.Box != null)
 				{
 					Box box = destination.Box;
-					if (box.Push(state,direction))
+					if (box.Push(direction))
 					{
 						Move(Position + direction);
 						sound.Play("push");

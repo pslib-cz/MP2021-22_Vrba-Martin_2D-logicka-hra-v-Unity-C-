@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Box : Entity, IMovingEntity
+public class Box : Entity, IMovingEntity, IPushable
 {
 	private Box(){}
 
@@ -13,7 +13,7 @@ public class Box : Entity, IMovingEntity
 		this.MappedObject = o;
 	}
 
-	public bool Push(LevelState state, Direction direction)
+	public bool Push(Direction direction)
 	{
 		Tile destination = state[Position + direction];
 
