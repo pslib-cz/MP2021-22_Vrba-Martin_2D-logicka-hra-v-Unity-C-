@@ -99,7 +99,6 @@ public class LevelManager : MonoBehaviour
 
             }
 
-
             Environment.Add(newObject);
             levelState.Add(newEntity);
 

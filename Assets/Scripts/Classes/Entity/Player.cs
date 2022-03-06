@@ -91,9 +91,6 @@ public class Player : Entity, IDirectionFacingEntity, IMovingEntity
 		{
 			Debug.Log("input is none");
 		}
-
-
-		//do actual stuff
 	}
 	#endregion
 	#region UpdateSprite
