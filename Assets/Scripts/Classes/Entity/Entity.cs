@@ -25,13 +25,4 @@ public abstract class Entity
     {
         renderer.sprite = sprites[name];
     }
-    /*public Entity(EntityConstructor ec)
-    {
-        throw new NotImplementedException();
-    }*/
-
-    /*public Entity Copy()
-	{
-        throw new NotImplementedException();
-	}*/
 }
