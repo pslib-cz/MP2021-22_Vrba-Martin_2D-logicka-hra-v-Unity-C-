@@ -23,18 +23,24 @@ public class LevelManager : MonoBehaviour
     private PauseScreen pauseScreen;
     private SoundManager sound;
 
+    CameraControl cc;
 
     TextAsset[] levelTexts;
+
+
+
+
     void Start()
     {
         pauseScreen = FindObjectOfType<PauseScreen>();
+        cc = FindObjectOfType<CameraControl>();
         EndScreen.enabled = false;
         History = new Stack<LevelState>();
         ReadAllLevels();
         LoadLevel(0);
 
 
-
+       
     }
 
     void ReadAllLevels()
@@ -66,6 +72,12 @@ public class LevelManager : MonoBehaviour
             throw;
         }
         LevelState levelState = new LevelState();
+
+
+        /*int smallestX = 0;
+        int biggestX = 0;
+        int smallestY = 0;
+        int biggestY = 0;*/
 
         for (int i = 0; i < savedLevel.Entities.Length; i++)
         {
@@ -99,10 +111,31 @@ public class LevelManager : MonoBehaviour
 
             }
 
+            /*
+            if (newEntity.Position.x < smallestX)
+            {
+                smallestX = newEntity.Position.x;
+            }
+            if (newEntity.Position.x > biggestX)
+            {
+                biggestX = newEntity.Position.x;
+            }
+            if (newEntity.Position.y < smallestY)
+            {
+                smallestY = newEntity.Position.y;
+            }
+            if (newEntity.Position.y > biggestY)
+            {
+                biggestY = newEntity.Position.y;
+            }*/
+
             Environment.Add(newObject);
             levelState.Add(newEntity);
 
         }
+
+        //cc.CenterCamera(smallestX, biggestX, smallestY, biggestY);
+
 
         level = levelState;
 
@@ -262,23 +295,26 @@ public class LevelManager : MonoBehaviour
             RenderTile(storage, z);
         }
 
-    }
-
-    void RenderTile(Entity entity, int z)
-    {
-        entity.MappedObject.transform.position = new Vector3(entity.Position.x, entity.Position.y, z) * tileSize;
+        void RenderTile(Entity entity, int z)
+        {
+            entity.MappedObject.transform.position = (new Vector3(entity.Position.x, entity.Position.y, z)-level.PositionOffset) * tileSize * level.TileZoom;
+            entity.MappedObject.transform.localScale = new Vector3(level.TileZoom, level.TileZoom);
 
         try
-        {
-            entity.UpdateSprite();
-        }
-        catch (System.NotImplementedException)
-        {
-            Debug.Log(entity + " " +
-                "doesnt have sprite update method");
-        }
+            {
+                entity.UpdateSprite();
+            }
+            catch (System.NotImplementedException)
+            {
+                Debug.Log(entity + " " +
+                    "doesnt have sprite update method");
+            }
 
+
+        }
 
     }
+
+    
 
 }

@@ -1,11 +1,41 @@
 using System.Collections.Generic;
-
+using UnityEngine;
 
 public class LevelState
 {
     public int id; //for testing
 
     private IDictionary<Coordinates, Tile> Tiles;
+
+    private int _smallestX;
+    private int _biggestX;
+
+    private int _smallestY;
+    private int _biggestY;
+
+    private float _diffX { get { return _biggestX - _smallestX; } }
+    private float _diffY { get { return _biggestY - _smallestY; } }
+
+    public float TileZoom 
+    { 
+        get
+        {
+            const float zoom = 12f;
+            //gets either diffx or diffy based on which one is bigger
+            float biggerDiff = (_diffX > _diffY) ? _diffX : _diffY;
+
+            return zoom / biggerDiff;
+        } 
+    }
+
+    public Vector3 PositionOffset {
+        get
+        {
+            return new Vector3(_diffX / 2, _diffY / 2) ;
+        }
+    }
+
+
 
     public Player Player { get; private set; }
     public List<Wall> Walls { get; private set; }
@@ -46,6 +76,15 @@ public class LevelState
             Tiles.Add(entity.Position, newTile);
         }
 
+        //update biggest/smallest coordinates
+        if (entity.Position.x > _biggestX)
+            _biggestX = entity.Position.x;
+        if (entity.Position.x < _smallestX)
+            _biggestX = entity.Position.x;
+        if (entity.Position.y > _biggestY)
+            _biggestY = entity.Position.y;
+        if (entity.Position.y < _smallestY)
+            _smallestY = entity.Position.y;
 
 
         /*

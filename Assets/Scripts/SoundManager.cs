@@ -8,8 +8,11 @@ public class SoundManager : MonoBehaviour
     Dictionary<string, AudioSource> sounds;
     Dictionary<string, AudioSource> music;
     public static bool DoneLoading = false;
+    public bool Muted;
     void Start()
     {
+        Muted = false;
+
         AudioClip[] clips;
         //sound effects
         clips = Resources.LoadAll<AudioClip>("Sounds/sfx/");
@@ -35,9 +38,22 @@ public class SoundManager : MonoBehaviour
         DoneLoading = true;
     }
 
-    // Update is called once per frame
+
     void Update()
     {
+        //(un)mute on M press
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            Muted = !Muted;
+            if (Muted)
+            {
+                AudioListener.volume = 0;
+            }
+            else
+            {
+                AudioListener.volume = 1;
+            }
+        }
     }
 
     public void Play(string name)
