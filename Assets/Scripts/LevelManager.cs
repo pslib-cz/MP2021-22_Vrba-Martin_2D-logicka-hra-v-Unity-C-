@@ -40,7 +40,7 @@ public class LevelManager : MonoBehaviour
         LoadLevel(0);
 
 
-       
+
     }
 
     void ReadAllLevels()
@@ -167,19 +167,38 @@ public class LevelManager : MonoBehaviour
         {
             bool skipped = false;
 
-            if (!(Input.GetKeyDown(KeyCode.S)|| Input.GetKeyDown(KeyCode.K)|| Input.GetKeyDown(KeyCode.I)|| Input.GetKeyDown(KeyCode.P)))
+            switch (skip)
             {
+                default:
+                    if (Input.GetKeyDown(KeyCode.S))
+                        skip = KeyCode.S;
+                    else
+                        skip = KeyCode.None;
 
+                    break;
+
+                case KeyCode.S:
+                    if (Input.GetKeyDown(KeyCode.K))
+                        skip = KeyCode.K;
+                    else
+                        skip = KeyCode.None;
+                    break;
+
+                case KeyCode.K:
+                    if (Input.GetKeyDown(KeyCode.I))
+                        skip = KeyCode.I;
+                    else
+                        skip = KeyCode.None;
+                    break;
+
+                case KeyCode.I:
+                    if (Input.GetKeyDown(KeyCode.P))
+                        skipped = true;
+                    else
+                        skip = KeyCode.None;
+                    break;
             }
 
-            if (Input.GetKeyDown(KeyCode.S))
-                skip = KeyCode.S;
-            if (Input.GetKeyDown(KeyCode.K) && skip == KeyCode.S)
-                skip = KeyCode.K;
-            if (Input.GetKeyDown(KeyCode.I) && skip == KeyCode.K)
-                skip = KeyCode.I;
-            if (Input.GetKeyDown(KeyCode.P) && skip == KeyCode.I)
-                skipped = true; 
 
 
             if (Input.GetKeyDown(KeyCode.Escape))
@@ -189,13 +208,13 @@ public class LevelManager : MonoBehaviour
             {
                 if (!LoadLevel(LevelID + 1))
                     EndScreen.enabled = true;
-                
+
                 return;
             }
 
             Direction pressed = Direction.None;
             bool doTick = false;
-           
+
 
 
             if (Input.GetKeyDown(KeyCode.UpArrow))
@@ -322,10 +341,10 @@ public class LevelManager : MonoBehaviour
 
         void RenderTile(Entity entity, int z)
         {
-            entity.MappedObject.transform.position = (new Vector3(entity.Position.x, entity.Position.y, z)-level.PositionOffset) * tileSize * level.TileZoom;
+            entity.MappedObject.transform.position = (new Vector3(entity.Position.x, entity.Position.y, z) - level.PositionOffset) * tileSize * level.TileZoom;
             entity.MappedObject.transform.localScale = new Vector3(level.TileZoom, level.TileZoom);
 
-        try
+            try
             {
                 entity.UpdateSprite();
             }
@@ -340,6 +359,6 @@ public class LevelManager : MonoBehaviour
 
     }
 
-    
+
 
 }
