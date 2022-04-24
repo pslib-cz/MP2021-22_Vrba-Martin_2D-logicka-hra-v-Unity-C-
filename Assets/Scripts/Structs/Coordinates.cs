@@ -7,6 +7,23 @@ public struct Coordinates
         this.y = y;
 	}
 
+	public static Direction GetDirection(Coordinates from, Coordinates to)
+	{
+		int dx = from.x - to.x;
+		int dy = from.y - to.y;
+
+		if (dx ==  1 && dy ==  0)
+			return Direction.Left;
+		if (dx == -1 && dy ==  0)
+			return Direction.Right;
+		if (dx ==  0 && dy ==  1)
+			return Direction.Down;
+		if (dx ==  0 && dy == -1)
+			return Direction.Up;
+
+		throw new System.NotImplementedException("not adjacent, not implemented");
+	}
+
     public static Coordinates operator + (Coordinates coords, Direction direction)
     {
 		switch (direction)

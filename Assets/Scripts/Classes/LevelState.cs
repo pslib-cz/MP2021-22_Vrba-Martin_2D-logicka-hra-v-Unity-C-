@@ -43,7 +43,8 @@ public class LevelState
     public List<Box> Boxes { get; private set; }
     public List<Storage> Storages { get; private set; }
     public List<Button> Buttons { get; private set; }
-    public List<Button> Doors { get; private set; }
+    //public List<Door> Doors { get; private set; }
+    public List<Ice> Ices { get; private set; }
 
     public bool Solved
     {
@@ -137,7 +138,9 @@ public class LevelState
                  Doors.Add(entity as Door);
                  break;*/
 
-
+            case nameof(Ice):
+                Ices.Add(entity as Ice);
+                break;
 
 
 
@@ -253,6 +256,11 @@ public class LevelState
             newState.Add(storage.Copy(newState));
         }
 
+        foreach (Ice ice in Ices)
+        {
+            newState.Add(ice.Copy(newState));
+        }
+
 
         ///more entities
 
@@ -291,14 +299,10 @@ public class LevelState
         this.Floors = new List<Floor>();
         this.Storages = new List<Storage>();
 
+        this.Ices = new List<Ice>();
 
         this.Tiles = new Dictionary<Coordinates, Tile>();
-
-
     }
-
-
-
 
     /*public LevelState(List<GameObject> entities)
     {

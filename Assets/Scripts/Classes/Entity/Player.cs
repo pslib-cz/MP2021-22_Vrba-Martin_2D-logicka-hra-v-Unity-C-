@@ -49,11 +49,16 @@ public class Player : Entity, IDirectionFacingEntity, IMovingEntity
 	#region IMovingEntity
 	public void Move(Coordinates destination)
 	{
+
+		if (state[destination].Opened)
+		{
 		//Debug.Log("playe moved");
 		//Debug.Log(destination.x+" - "+destination.y);
 		Coordinates previous = Position;
 		this.Position = destination;
 		state[previous].Update(this);
+		state[destination].Floor.SteppedOn(this, Coordinates.GetDirection(previous, destination));
+		}
 	}
 	#endregion
 	#region PerformTick
@@ -66,8 +71,6 @@ public class Player : Entity, IDirectionFacingEntity, IMovingEntity
 
 			Tile destination = state[LookingAt()];
 
-			if (destination.Opened)
-			{
 				if (destination.Box != null)
 				{
 					Box box = destination.Box;
@@ -79,10 +82,13 @@ public class Player : Entity, IDirectionFacingEntity, IMovingEntity
 				}
 				else
 				{
+                if (destination.Opened)
+                {
+
 					Move(Position + direction);
 					sound.Play("step");
+                }
 				}
-			}
 
 
 

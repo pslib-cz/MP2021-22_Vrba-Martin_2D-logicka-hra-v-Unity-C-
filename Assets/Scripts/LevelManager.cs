@@ -27,7 +27,7 @@ public class LevelManager : MonoBehaviour
 
     TextAsset[] levelTexts;
 
-
+    KeyCode skip;
 
 
     void Start()
@@ -51,6 +51,8 @@ public class LevelManager : MonoBehaviour
 
     bool LoadLevel(int id)
     {
+        skip = KeyCode.None;
+
         if (id < 0 || levelTexts.Length <= id)
         {
             return false;
@@ -106,6 +108,9 @@ public class LevelManager : MonoBehaviour
                 case TileType.Storage:
                     newEntity = new Storage(constructor, newObject, levelState);
                     break;
+                case TileType.Ice:
+                    newEntity = new Ice(constructor, newObject);
+                    break;
                 default:
                     throw new System.NotImplementedException("unknown tile type");
 
@@ -160,10 +165,27 @@ public class LevelManager : MonoBehaviour
 
         if (Input.anyKeyDown)
         {
+            bool skipped = false;
+
+            if (!(Input.GetKeyDown(KeyCode.S)|| Input.GetKeyDown(KeyCode.K)|| Input.GetKeyDown(KeyCode.I)|| Input.GetKeyDown(KeyCode.P)))
+            {
+
+            }
+
+            if (Input.GetKeyDown(KeyCode.S))
+                skip = KeyCode.S;
+            if (Input.GetKeyDown(KeyCode.K) && skip == KeyCode.S)
+                skip = KeyCode.K;
+            if (Input.GetKeyDown(KeyCode.I) && skip == KeyCode.K)
+                skip = KeyCode.I;
+            if (Input.GetKeyDown(KeyCode.P) && skip == KeyCode.I)
+                skipped = true; 
+
+
             if (Input.GetKeyDown(KeyCode.Escape))
                 return;
 
-            if (level.Solved)//checking here so that there is one frame before next level
+            if (level.Solved || skipped)//checking here so that there is one frame before next level
             {
                 if (!LoadLevel(LevelID + 1))
                     EndScreen.enabled = true;
@@ -275,7 +297,10 @@ public class LevelManager : MonoBehaviour
         {
             RenderTile(floor, z);
         }
-
+        foreach (Ice ice in level.Ices)
+        {
+            RenderTile(ice, z);
+        }
 
         z = -1; //object level
         RenderTile(level.Player, z);

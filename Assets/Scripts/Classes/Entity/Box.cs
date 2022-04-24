@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Box : Entity, IMovingEntity, IPushable
+public class Box : Entity, IMovingEntity, IPushable, IObstacle
 {
 	private Box(){}
 
@@ -22,16 +22,22 @@ public class Box : Entity, IMovingEntity, IPushable
 			return false;
 		}
 
+
 		Move(Position + direction);
 		return true;
 	}
 
 	public void Move(Coordinates destination)
 	{
-		Coordinates previous = Position;
-		this.Position = destination;
-		state[previous].Update(this);
-		state[Position].Update(this);
+		if (state[destination].Opened)
+        {
+
+			Coordinates previous = Position;
+			this.Position = destination;
+			state[previous].Update(this);
+			state[Position].Update(this);
+			state[destination].Floor.SteppedOn(this, Coordinates.GetDirection(previous, destination));
+        }
 	}
 	
 	/*public Box Copy()
@@ -65,5 +71,13 @@ public class Box : Entity, IMovingEntity, IPushable
 
 		generatedSprite = true;
 	}
-    #endregion
+	#endregion
+
+	#region IObstacle
+	public bool Opened { get { return false; } }
+	public void Open(bool open)
+	{
+		return; //box cannot be opened (as obstacle)
+	}
+	#endregion
 }

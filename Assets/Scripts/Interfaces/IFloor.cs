@@ -2,14 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum TileType
+public interface IFloor 
 {
-	Floor,
-	Wall,
-	Player,
-	Box,
-	Storage,
-	Button,
-	Door,
-	Ice,
+    void SteppedOn(Entity entity, Direction direction);
 }

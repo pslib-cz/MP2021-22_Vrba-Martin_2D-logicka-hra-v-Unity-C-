@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Floor : Entity
+public class Floor : Entity, IFloor
 {
 	public Floor(EntityConstructor ec, GameObject o)
 	{
@@ -33,4 +33,6 @@ public class Floor : Entity
 		generatedSprite = true;
 	}
 	#endregion
+
+	public void SteppedOn(Entity entity, Direction direction) { } //basic floor doesn't do anything special
 }

@@ -15,6 +15,9 @@ public class Tile
 
 	public void Add(Entity entity)
 	{
+		if (entity is IFloor && Floor != null)
+			throw new System.Exception("there cannot be more than 1 floor: "+entity.Position.x+"-"+entity.Position.y);
+
 		Entities.Add(entity);
 	}
 
@@ -32,7 +35,7 @@ public class Tile
 			bool hasFloor = false;
 			foreach (Entity entity in Entities)
 			{
-				if (entity is Floor)
+				if (entity is IFloor)
 					hasFloor = true;
 				if (entity is IObstacle)
 				{
@@ -63,6 +66,20 @@ public class Tile
 			}
 			return null;
 		} 
+	}
+	public IFloor Floor
+    {
+		get
+		{
+			foreach (Entity entity in Entities)
+			{
+				if (entity is IFloor)
+				{
+					return entity as IFloor;
+				}
+			}
+			return null;
+		}
 	}
 
 }
