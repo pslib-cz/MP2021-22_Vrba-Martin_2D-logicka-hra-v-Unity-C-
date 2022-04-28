@@ -9,7 +9,7 @@ public enum TileType
 	Player,
 	Box,
 	Storage,
-	Button,
-	Door,
+	Crack,
+	Hole,
 	Ice,
 }

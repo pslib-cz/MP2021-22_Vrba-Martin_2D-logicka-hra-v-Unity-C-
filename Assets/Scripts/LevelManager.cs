@@ -108,6 +108,12 @@ public class LevelManager : MonoBehaviour
                 case TileType.Storage:
                     newEntity = new Storage(constructor, newObject, levelState);
                     break;
+                case TileType.Crack:
+                    newEntity = new Hole(constructor, newObject, Hole.Stages.Crack);
+                    break;
+                case TileType.Hole:
+                    newEntity = new Hole(constructor, newObject, Hole.Stages.Hole);
+                    break;
                 case TileType.Ice:
                     newEntity = new Ice(constructor, newObject);
                     break;
@@ -295,10 +301,16 @@ public class LevelManager : MonoBehaviour
         level = level.Copy();
 
         level.Player.PerformTick(pressed);
-        foreach (Button button in level.Buttons)
+
+        foreach ( Hole hole in level.Holes)
+        {
+            hole.PerformTick(pressed);
+        }
+
+        /*foreach (Button button in level.Buttons)
         {
             button.PerformTick(pressed);
-        }
+        }*/
 
         if (level.Solved)
         {
@@ -321,7 +333,13 @@ public class LevelManager : MonoBehaviour
             RenderTile(ice, z);
         }
 
-        z = -1; //object level
+        z--; //hole level
+        foreach (Hole hole in level.Holes)
+        {
+            RenderTile(hole, z);
+        }
+
+        z--; //object level
         RenderTile(level.Player, z);
 
         foreach (Wall wall in level.Walls)

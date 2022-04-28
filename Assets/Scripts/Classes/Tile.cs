@@ -15,8 +15,20 @@ public class Tile
 
 	public void Add(Entity entity)
 	{
-		if (entity is IFloor && Floor != null)
+        /*if (entity is IFloor && Floor != null)
 			throw new System.Exception("there cannot be more than 1 floor: "+entity.Position.x+"-"+entity.Position.y);
+		*/
+
+        if (entity is Box)
+        {
+            if (Hole != null)
+            {
+                if (Hole.TryFill())
+				{
+					return; //skip adding to entities
+				}
+            }
+        }
 
 		Entities.Add(entity);
 	}
@@ -67,18 +79,48 @@ public class Tile
 			return null;
 		} 
 	}
-	public IFloor Floor
+
+	public void SteppedOn(Entity entity, Direction direction)
+    {
+        foreach (IFloor floor in Floors)
+        {
+			floor.SteppedOn(entity, direction);
+        }
+    }
+	public List<IFloor> Floors
     {
 		get
 		{
+			List<IFloor> floors = new List<IFloor>();
 			foreach (Entity entity in Entities)
 			{
 				if (entity is IFloor)
 				{
-					return entity as IFloor;
+					floors.Add( entity as IFloor);
 				}
 			}
-			return null;
+			if (floors.Count == 0)
+				return null;
+			else
+				return floors;
+		}
+	}
+	
+	public Hole Hole
+	{
+		get
+		{
+			foreach (Entity entity in Entities)
+			{
+				if (entity is Hole)
+				{
+					return entity as Hole;
+				}
+			}
+
+			
+				return null;
+			
 		}
 	}
 

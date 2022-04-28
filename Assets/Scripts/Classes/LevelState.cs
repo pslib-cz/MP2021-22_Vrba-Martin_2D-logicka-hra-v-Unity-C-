@@ -42,7 +42,9 @@ public class LevelState
     public List<Floor> Floors { get; private set; }
     public List<Box> Boxes { get; private set; }
     public List<Storage> Storages { get; private set; }
-    public List<Button> Buttons { get; private set; }
+
+    public List<Hole> Holes { get; private set; }
+    //public List<Button> Buttons { get; private set; }
     //public List<Door> Doors { get; private set; }
     public List<Ice> Ices { get; private set; }
 
@@ -128,13 +130,16 @@ public class LevelState
                 Storages.Add(entity as Storage);
                 break;
 
+            case nameof(Hole):
+                Holes.Add(entity as Hole);
+                break;
 
-            case nameof(Button):
+            /*case nameof(Button):
                 Buttons.Add(entity as Button);
                 break;
 
 
-            /* case nameof(Door):
+             case nameof(Door):
                  Doors.Add(entity as Door);
                  break;*/
 
@@ -256,10 +261,16 @@ public class LevelState
             newState.Add(storage.Copy(newState));
         }
 
+        foreach (Hole hole in Holes)
+        {
+            newState.Add(hole.Copy(newState));
+        }
+
         foreach (Ice ice in Ices)
         {
             newState.Add(ice.Copy(newState));
         }
+
 
 
         ///more entities
@@ -295,9 +306,10 @@ public class LevelState
         this.Player = null;
         this.Walls = new List<Wall>();
         this.Boxes = new List<Box>();
-        this.Buttons = new List<Button>();
+        //this.Buttons = new List<Button>();
         this.Floors = new List<Floor>();
         this.Storages = new List<Storage>();
+        this.Holes = new List<Hole>();
 
         this.Ices = new List<Ice>();
 

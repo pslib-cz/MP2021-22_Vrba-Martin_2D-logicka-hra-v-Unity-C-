@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-public class Player : Entity, IDirectionFacingEntity, IMovingEntity
+public class Player : Entity, IDirectionFacingEntity, IMovingEntity, ICrumbler
 {
 
 	#region Constructors
@@ -57,7 +57,7 @@ public class Player : Entity, IDirectionFacingEntity, IMovingEntity
 		Coordinates previous = Position;
 		this.Position = destination;
 		state[previous].Update(this);
-		state[destination].Floor.SteppedOn(this, Coordinates.GetDirection(previous, destination));
+		state[destination].SteppedOn(this, Coordinates.GetDirection(previous, destination));
 		}
 	}
 	#endregion

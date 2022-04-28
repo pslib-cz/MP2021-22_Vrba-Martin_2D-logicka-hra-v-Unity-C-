@@ -36,7 +36,7 @@ public class Box : Entity, IMovingEntity, IPushable, IObstacle
 			this.Position = destination;
 			state[previous].Update(this);
 			state[Position].Update(this);
-			state[destination].Floor.SteppedOn(this, Coordinates.GetDirection(previous, destination));
+			state[destination].SteppedOn(this, Coordinates.GetDirection(previous, destination));
         }
 	}
 	

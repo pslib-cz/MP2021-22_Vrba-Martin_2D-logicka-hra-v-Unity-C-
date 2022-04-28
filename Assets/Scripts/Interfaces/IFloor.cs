@@ -5,4 +5,5 @@ using UnityEngine;
 public interface IFloor 
 {
     void SteppedOn(Entity entity, Direction direction);
+
 }
