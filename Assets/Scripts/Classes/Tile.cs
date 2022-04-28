@@ -83,7 +83,10 @@ public class Tile
 
     public void SteppedOn(Entity entity, Direction direction)
     {
+        if (Hole != null)
+        {
             Hole.SteppedOn(entity, direction);
+        }
             foreach (IFloor floor in Floors)
             {
                 floor.SteppedOn(entity, direction);
