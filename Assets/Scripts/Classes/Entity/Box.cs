@@ -17,10 +17,14 @@ public class Box : Entity, IMovingEntity, IPushable, IObstacle
 	{
 		Tile destination = state[Position + direction];
 
-		if ( (destination.Box != null) || (!destination.Opened) /*add more if needed*/)
-		{
-			return false;
-		}
+        if (!destination.HasOpenHole)
+        {
+
+			if ( (destination.Box != null) || (!destination.Opened) /*add more if needed*/)
+			{
+				return false;
+			}
+        }
 
 
 		Move(Position + direction);
@@ -29,7 +33,7 @@ public class Box : Entity, IMovingEntity, IPushable, IObstacle
 
 	public void Move(Coordinates destination)
 	{
-		if (state[destination].Opened)
+		if (state[destination].Opened||state[destination].HasOpenHole)
         {
 
 			Coordinates previous = Position;
@@ -70,6 +74,14 @@ public class Box : Entity, IMovingEntity, IPushable, IObstacle
 		MappedObject.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/box/box_128");
 
 		generatedSprite = true;
+	}
+	#endregion
+
+	#region Delete
+	public override void Delete()
+    {
+		state.Boxes.Remove(this);
+		GameObject.Destroy(MappedObject);
 	}
 	#endregion
 

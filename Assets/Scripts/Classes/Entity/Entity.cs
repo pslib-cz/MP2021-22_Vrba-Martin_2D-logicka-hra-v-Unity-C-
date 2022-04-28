@@ -21,6 +21,11 @@ public abstract class Entity
         throw new NotImplementedException();
 	}
 
+    public virtual void Delete()
+    {
+        throw new NotImplementedException();
+    }
+
     protected virtual void SetSprite(string name)
     {
         renderer.sprite = sprites[name];
